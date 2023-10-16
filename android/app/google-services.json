@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "925747815350",
+    "project_id": "absence-of-salab",
+    "storage_bucket": "absence-of-salab.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:925747815350:android:abd6206f20e605f3d25717",
+        "android_client_info": {
+          "package_name": "com.DevMuslim.absence"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPbBgBr981OmxOMXGrUFtboR8hn0jmHPQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
