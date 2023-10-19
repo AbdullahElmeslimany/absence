@@ -1,4 +1,5 @@
 import 'package:absence/screens/homepage/assestant%20teach/addsection.dart';
+import 'package:absence/screens/homepage/student/studenthomepage.dart';
 import 'package:flutter/material.dart';
 
 class DrawerPage extends StatelessWidget {
@@ -34,6 +35,22 @@ class DrawerPage extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => AddSection(),
+                ));
+          },
+        ),
+        InkWell(
+          child: ListTile(
+            leading: Icon(Icons.co_present_outlined, size: 26),
+            title: Text(
+              'الطالب',
+              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+            ),
+          ),
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => StudentHomePage(),
                 ));
           },
         ),

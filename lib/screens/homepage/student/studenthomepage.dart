@@ -1,3 +1,4 @@
+import 'package:absence/constant/encryptprossing.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
@@ -59,7 +60,8 @@ class _StudentHomePageState extends State<StudentHomePage> {
                           });
 
                           print("======================================");
-                          print(latecode);
+                          // print(latecode);
+                          // print(MyEncryption.decryptAES(latecode));
                           print("--------------------------------------");
 
                           // Navigator.push(

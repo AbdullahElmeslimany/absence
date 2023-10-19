@@ -177,24 +177,16 @@ class _AddSectionState extends State<AddSection> {
                 onPressed: () async {
                   setState(() {
                     result =
-                        '{"nameteacher":$nameteacher, \n "namesubject":$namesubject, \n "numbersubject":$numbersubject, \n "dataday":$dataday, \n "datasubject":$datasubject \n }';
+                        '{"id":$idtech, \n"nameteacher":$nameteacher, \n "namesubject":$namesubject, \n "numbersubject":$numbersubject, \n "dataday":$dataday, \n "datasubject":$datasubject \n }';
+                    convertmap = jsonDecode(result!);
                   });
                   print(result);
                   if (result != null) {
-                    await pref.add({"section": result});
+                    await pref.add({"section": convertmap});
                   }
                 },
               ),
-              const SizedBox(
-                height: 15,
-              ),
-              result != null
-                  ? QrImageView(
-                      data: result!,
-                      size: 200,
-                      version: QrVersions.auto,
-                    )
-                  : Container()
+              
             ],
           )),
         ),
