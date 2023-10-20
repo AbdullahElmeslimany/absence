@@ -1,6 +1,8 @@
-import 'package:absence/constant/encryptprossing.dart';
+import 'package:absence/constant/constant.dart';
+import 'package:absence/constant/subject.dart';
+import 'package:absence/screens/homepage/student/camera.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
 
 class StudentHomePage extends StatefulWidget {
   const StudentHomePage({super.key});
@@ -10,12 +12,29 @@ class StudentHomePage extends StatefulWidget {
 }
 
 class _StudentHomePageState extends State<StudentHomePage> {
-  MobileScannerController cameraController = MobileScannerController();
-  bool isScanCompleted = false;
-  String? latecode;
+  List datasubject = [];
+  getsubject() async {
+    QuerySnapshot quiry =
+        await FirebaseFirestore.instance.collection("subject").get();
+    setState(() {
+      datasubject.addAll(quiry.docs);
+    });
+  }
 
-  void colseScreen() {
-    isScanCompleted = false;
+  List datasection = [];
+  getdatachectactivesction() async {
+    setState(() {});
+    print("datasection====================================");
+
+    print("datasection====================================");
+  }
+
+  @override
+  void initState() {
+    print(subjectClasses["firstterm"]["Informationsystems"]["second"]);
+    // getdatachectactivesction();
+    getsubject();
+    super.initState();
   }
 
   @override
@@ -41,40 +60,67 @@ class _StudentHomePageState extends State<StudentHomePage> {
       appBar: AppBar(
           backgroundColor: Colors.blueGrey,
           title: const Center(child: Text("الطالب"))),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Center(
-                child: Container(
-                    height: 200,
-                    width: 200,
-                    child: MobileScanner(
-                      onDetect: (barcode, args) {
-                        if (!isScanCompleted) {
-                          setState(() {
-                            String code = barcode.rawValue ?? '----------';
-                            latecode = code;
-                            isScanCompleted = true;
-                          });
-
-                          print("======================================");
-                          // print(latecode);
-                          // print(MyEncryption.decryptAES(latecode));
-                          print("--------------------------------------");
-
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //       builder: (context) => StudentHomePage(
-                          //           code: code!, func: colseScreen),
-                          //     ));
-                        }
-                      },
-                    ))),
-            latecode == null ? Container() : Text(latecode!)
-          ],
+      body: Padding(
+        padding: const EdgeInsets.only(top: 20.0),
+        child: StreamBuilder(
+          stream: sectionsteaheractive,
+          builder:
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            return ListView.builder(
+              itemCount: subjectClasses["firstterm"]["Informationsystems"]
+                      ["second"]
+                  .length,
+              itemBuilder: (BuildContext context, int index) {
+                return InkWell(
+                  onTap: () {
+                    print(subjectClasses["firstterm"]["Informationsystems"]
+                        ["second"][index]["subject"]);
+                    print(subjectClasses["firstterm"]["Informationsystems"]
+                        ["second"][index]["code"]);
+                    setState(() {
+                      namesubject = subjectClasses["firstterm"]
+                          ["Informationsystems"]["second"][index]["code"];
+                    });
+                    if (snapshot.data!.docs[0]["active"] == true &&
+                        snapshot.data!.docs[0]["numbersubject"] ==
+                            subjectClasses["firstterm"]["Informationsystems"]
+                                ["second"][index]["code"]) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => StudentAttendance(
+                                subjectname: subjectClasses["firstterm"]
+                                        ["Informationsystems"]["second"][index]
+                                    ["subject"]),
+                          ));
+                    }
+                  },
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Container(
+                          padding:
+                              EdgeInsetsDirectional.symmetric(horizontal: 20),
+                          alignment: Alignment.centerRight,
+                          height: 70,
+                          width: MediaQuery.sizeOf(context).width - 20,
+                          decoration: BoxDecoration(color: Colors.white),
+                          child: Text(
+                            subjectClasses["firstterm"]["Informationsystems"]
+                                ["second"][index]["subject"],
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          )),
+                      SizedBox(
+                        height: 7,
+                      )
+                    ],
+                  ),
+                );
+              },
+            );
+          },
         ),
       ),
     );

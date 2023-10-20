@@ -16,15 +16,27 @@ getData() async {
   pref = FirebaseFirestore.instance.collection('section');
   // stremdata = pref.snapshots();
   QuerySnapshot get = await pref.get();
-  dataget.addAll(get.docs);
+  // dataget.addAll(get.docs);
   print("===================================");
-  print(dataget[0]["section"]);
+  // print(dataget[0]);
   print("===================================");
   print(pref.snapshots());
   // dataget.addAll(stremdata);
-  // convertmap = jsonDecode(dataget[0]["section"]);
+  // convertmap = jsonDecode(dataget[0]);
   print("===================================");
   // print(convertmap!["nameteacher"]);
+}
+
+late QuerySnapshot prfcon;
+List<QueryDocumentSnapshot> datacon = [];
+condtionGet() async {
+  prfcon = await FirebaseFirestore.instance
+      .collection("section")
+      .where("id", isEqualTo: "2")
+      .get();
+
+  datacon.addAll(prfcon.docs);
+  print(datacon);
 }
 
 Stream<QuerySnapshot> users = FirebaseFirestore.instance
@@ -32,5 +44,22 @@ Stream<QuerySnapshot> users = FirebaseFirestore.instance
     .orderBy("time", descending: false)
     .snapshots();
 
-Stream<QuerySnapshot> sectionsteaher =
-    FirebaseFirestore.instance.collection("section").snapshots();
+Stream<QuerySnapshot> sectionsteaher = FirebaseFirestore.instance
+    .collection("section")
+    .where('id', isEqualTo: "2")
+    .snapshots();
+
+String section = "5-6";
+String namesubject = "5685";
+Stream<QuerySnapshot> sectionsteaheractive = FirebaseFirestore.instance
+    .collection("section")
+    .where('numbersection', isEqualTo: section)
+    .where("numbersubject", isEqualTo: namesubject)
+    .snapshots();
+
+
+// كود العشوائي
+
+  // final refrandom =
+  // FirebaseFirestore.instance.collection('random').doc("$idDosc");
+

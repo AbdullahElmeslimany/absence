@@ -45,6 +45,7 @@ dependencies:
   cloud_firestore: ^4.9.3
   firebase_auth: ^4.10.1
   encrypt: ^5.0.3
+  qr_scanner_overlay: ^0.0.2
 
 dev_dependencies:
   flutter_test:

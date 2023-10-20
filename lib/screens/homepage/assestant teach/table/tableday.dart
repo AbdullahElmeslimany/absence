@@ -57,10 +57,10 @@ class _TableDayState extends State<TableDay> {
                 setState(() {
                   isChecked1 = value!;
                   if (value == true) {
-                    dataday.add('"$day1"');
+                    dataday.add(day1);
                     print(dataday);
                   } else {
-                    dataday.remove('"$day1"');
+                    dataday.remove(day1);
                     print(dataday);
                   }
                 });
@@ -75,10 +75,10 @@ class _TableDayState extends State<TableDay> {
                 setState(() {
                   isChecked2 = value!;
                   if (value == true) {
-                    dataday.add('"$day2"');
+                    dataday.add(day2);
                     print(dataday);
                   } else {
-                    dataday.remove('"$day2"');
+                    dataday.remove(day2);
 
                     print(dataday);
                   }
@@ -94,10 +94,10 @@ class _TableDayState extends State<TableDay> {
                 setState(() {
                   isChecked3 = value!;
                   if (value == true) {
-                    dataday.add('"$day3"');
+                    dataday.add(day3);
                     print(dataday);
                   } else {
-                    dataday.remove('"$day3"');
+                    dataday.remove(day3);
                     print(dataday);
                   }
                 });
@@ -134,10 +134,10 @@ class _TableDayState extends State<TableDay> {
                 setState(() {
                   isChecked4 = value!;
                   if (value == true) {
-                    dataday.add('"$day4"');
+                    dataday.add(day4);
                     print(dataday);
                   } else {
-                    dataday.remove('"$day4"');
+                    dataday.remove(day4);
                     print(dataday);
                   }
                 });
@@ -152,10 +152,10 @@ class _TableDayState extends State<TableDay> {
                 setState(() {
                   isChecked5 = value!;
                   if (value == true) {
-                    dataday.add('"$day5"');
+                    dataday.add(day5);
                     print(dataday);
                   } else {
-                    dataday.remove('"$day5"');
+                    dataday.remove(day5);
                     print(dataday);
                   }
                 });
@@ -170,10 +170,10 @@ class _TableDayState extends State<TableDay> {
                 setState(() {
                   isChecked6 = value!;
                   if (value == true) {
-                    dataday.add('"$day6"');
+                    dataday.add(day6);
                     print(dataday);
                   } else {
-                    dataday.remove('"$day6"');
+                    dataday.remove(day6);
                     print(dataday);
                   }
                 });

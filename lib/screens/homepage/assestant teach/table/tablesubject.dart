@@ -76,10 +76,10 @@ class _TableSubjectState extends State<TableSubject> {
                 setState(() {
                   isChecked1 = value!;
                   if (value == true) {
-                    datasubject.add('"$time1"');
+                    datasubject.add(time1);
                     print(datasubject);
                   } else {
-                    datasubject.remove('"$time1"');
+                    datasubject.remove(time1);
                     print(datasubject);
                   }
                 });
@@ -94,10 +94,10 @@ class _TableSubjectState extends State<TableSubject> {
                 setState(() {
                   isChecked2 = value!;
                   if (value == true) {
-                    datasubject.add('"$time2"');
+                    datasubject.add(time2);
                     print(datasubject);
                   } else {
-                    datasubject.remove('"$time2"');
+                    datasubject.remove(time2);
                     print(datasubject);
                   }
                 });
@@ -112,10 +112,10 @@ class _TableSubjectState extends State<TableSubject> {
                 setState(() {
                   isChecked3 = value!;
                   if (value == true) {
-                    datasubject.add('"$time3"');
+                    datasubject.add(time3);
                     print(datasubject);
                   } else {
-                    datasubject.remove('"$time3"');
+                    datasubject.remove(time3);
                     print(datasubject);
                   }
                 });
@@ -130,10 +130,10 @@ class _TableSubjectState extends State<TableSubject> {
                 setState(() {
                   isChecked4 = value!;
                   if (value == true) {
-                    datasubject.add('"$time4"');
+                    datasubject.add(time4);
                     print(datasubject);
                   } else {
-                    datasubject.remove('"$time4"');
+                    datasubject.remove(time4);
                     print(datasubject);
                   }
                 });
@@ -148,10 +148,10 @@ class _TableSubjectState extends State<TableSubject> {
                 setState(() {
                   isChecked5 = value!;
                   if (value == true) {
-                    datasubject.add('"$time5"');
+                    datasubject.add(time5);
                     print(datasubject);
                   } else {
-                    datasubject.remove('"$time5"');
+                    datasubject.remove(time5);
                     print(datasubject);
                   }
                 });
@@ -200,10 +200,10 @@ class _TableSubjectState extends State<TableSubject> {
                 setState(() {
                   isChecked6 = value!;
                   if (value == true) {
-                    datasubject.add('"$time6"');
+                    datasubject.add(time6);
                     print(datasubject);
                   } else {
-                    datasubject.remove('"$time6"');
+                    datasubject.remove(time6);
                     print(datasubject);
                   }
                 });
@@ -218,10 +218,10 @@ class _TableSubjectState extends State<TableSubject> {
                 setState(() {
                   isChecked7 = value!;
                   if (value == true) {
-                    datasubject.add('"$time7"');
+                    datasubject.add(time7);
                     print(datasubject);
                   } else {
-                    datasubject.remove('"$time7"');
+                    datasubject.remove(time7);
                     print(datasubject);
                   }
                 });
@@ -236,10 +236,10 @@ class _TableSubjectState extends State<TableSubject> {
                 setState(() {
                   isChecked8 = value!;
                   if (value == true) {
-                    datasubject.add('"$time8"');
+                    datasubject.add(time8);
                     print(datasubject);
                   } else {
-                    datasubject.remove('"$time8"');
+                    datasubject.remove(time8);
                     print(datasubject);
                   }
                 });
@@ -254,10 +254,10 @@ class _TableSubjectState extends State<TableSubject> {
                 setState(() {
                   isChecked9 = value!;
                   if (value == true) {
-                    datasubject.add('"$time9"');
+                    datasubject.add(time9);
                     print(datasubject);
                   } else {
-                    datasubject.remove('"$time9"');
+                    datasubject.remove(time9);
                     print(datasubject);
                   }
                 });
@@ -272,10 +272,10 @@ class _TableSubjectState extends State<TableSubject> {
                 setState(() {
                   isChecked10 = value!;
                   if (value == true) {
-                    datasubject.add('"$time10"');
+                    datasubject.add(time10);
                     print(datasubject);
                   } else {
-                    datasubject.remove('"$time10"');
+                    datasubject.remove(time10);
                     print(datasubject);
                   }
                 });

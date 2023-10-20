@@ -11,33 +11,35 @@ class AttendanceRecordPage extends StatefulWidget {
   final idteach;
   final String namesubject;
   final mapdata;
+  final numberrandom;
   const AttendanceRecordPage(
       {super.key,
       required this.idteach,
       required this.namesubject,
-      required this.mapdata});
+      required this.mapdata,
+      required this.numberrandom});
 
   @override
   State<AttendanceRecordPage> createState() => _AttendanceRecordPageState();
 }
 
 class _AttendanceRecordPageState extends State<AttendanceRecordPage> {
-  late final encrypt;
+  // late final encrypt;
   @override
   void initState() {
-    setState(() {
-      encrypt = MyEncryption.encryptAES(json.encode(widget.mapdata));
-      print("===================================== encrypt");
+    // setState(() {
+    //   encrypt = MyEncryption.encryptAES(json.encode(widget.mapdata[0]));
+    print("===================================== encrypt");
+    print(widget.mapdata["id"]);
+    // print(json.encode(widget.mapdata[0]));
 
-      print(json.encode(widget.mapdata));
-
-      print("===================================== encrypt");
-    });
+    print("===================================== encrypt");
+    // });
     print(widget.idteach);
     print("===================================== map");
-    print(widget.mapdata["nameteacher"]);
+    // print(widget.mapdata[0]["nameteacher"]);
     print(DateTime.now());
-    print(MyEncryption.decryptAES(encrypt));
+    // print(MyEncryption.decryptAES(encrypt));
 
     super.initState();
   }
@@ -72,7 +74,7 @@ class _AttendanceRecordPageState extends State<AttendanceRecordPage> {
                 ? Container()
                 : Center(
                     child: QrImageView(
-                      data: encrypt.base64,
+                      data: widget.numberrandom.toString(),
                       size: MediaQuery.sizeOf(context).width - 40,
                       version: QrVersions.auto,
                     ),

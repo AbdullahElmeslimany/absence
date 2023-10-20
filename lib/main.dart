@@ -1,6 +1,7 @@
 import 'package:absence/constant/constant.dart';
 import 'package:absence/screens/homepage/assestant%20teach/teachhomepage.dart';
 import 'package:absence/screens/homepage/student/studenthomepage.dart';
+
 import 'package:absence/testapp/conectstream.dart';
 import 'package:absence/testapp/test1.dart';
 import 'package:absence/testapp/test2.dart';
@@ -24,9 +25,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      // home: StudentHomePage(),
+      home: StudentHomePage(),
       // home: HomePageTest(),
-      home: TechHomePage()
+      // home: TechHomePage()
       //  user == false ? StudentHomePage() : TechHomePage(),
     );
   }

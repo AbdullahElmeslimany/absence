@@ -27,6 +27,7 @@ class _AddSectionState extends State<AddSection> {
   String? days;
   String? namesubject;
   String? numbersubject;
+  String? numbersction;
   List<String>? data;
   String? result;
   @override
@@ -58,7 +59,7 @@ class _AddSectionState extends State<AddSection> {
                 textAlign: TextAlign.end,
                 onChanged: (value) {
                   setState(() {
-                    nameteacher = '"$value"';
+                    nameteacher = value;
                   });
                 },
               ),
@@ -82,7 +83,7 @@ class _AddSectionState extends State<AddSection> {
                 textAlign: TextAlign.end,
                 onChanged: (value) {
                   setState(() {
-                    numbersubject = '"$value"';
+                    numbersubject = value;
                   });
                 },
               ),
@@ -106,7 +107,7 @@ class _AddSectionState extends State<AddSection> {
                 textAlign: TextAlign.end,
                 onChanged: (value) {
                   setState(() {
-                    namesubject = '"$value"';
+                    namesubject = value;
                   });
                 },
               ),
@@ -129,7 +130,7 @@ class _AddSectionState extends State<AddSection> {
                 textAlign: TextAlign.end,
                 onChanged: (value) {
                   setState(() {
-                    numbersubject = '"$value"';
+                    numbersction = value;
                   });
                 },
               ),
@@ -175,18 +176,37 @@ class _AddSectionState extends State<AddSection> {
                           color: Colors.white),
                     ))),
                 onPressed: () async {
-                  setState(() {
-                    result =
-                        '{"id":$idtech, \n"nameteacher":$nameteacher, \n "namesubject":$namesubject, \n "numbersubject":$numbersubject, \n "dataday":$dataday, \n "datasubject":$datasubject \n }';
-                    convertmap = jsonDecode(result!);
+                  // setState(() {
+                  //   result =
+                  //       '{"id":$idtech, \n"nameteacher":$nameteacher, \n "namesubject":$namesubject, \n "numbersubject":$numbersubject, \n "dataday":$dataday, \n "datasubject":$datasubject \n }';
+                  //   convertmap = jsonDecode(result!);
+                  // });
+                  // print(result);
+                  // if (result != null) {
+                  // await pref.add({"section": convertmap});
+
+                  final addRandom =
+                      FirebaseFirestore.instance.collection('random').add({
+                    "idteacher": null,
+                    "nameteather": nameteacher,
+                    "nameSubject": namesubject,
+                    "randomSubject": null
+                  }).then((value) async {
+                    // return print(value.id);
+                    return await pref.add({
+                      "id": idtech,
+                      "nameteacher": nameteacher,
+                      "namesubject": namesubject,
+                      "numbersubject": numbersubject,
+                      "numbersection": numbersction,
+                      "dataday": dataday,
+                      "datasubject": datasubject,
+                      "active": false,
+                      "idRandom": value.id
+                    });
                   });
-                  print(result);
-                  if (result != null) {
-                    await pref.add({"section": convertmap});
-                  }
                 },
               ),
-              
             ],
           )),
         ),
