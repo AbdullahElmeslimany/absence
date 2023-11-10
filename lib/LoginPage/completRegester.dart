@@ -21,6 +21,7 @@ class CompletReqester extends StatefulWidget {
 
 class _CompletReqesterState extends State<CompletReqester> {
   late String firstname;
+  late String rank="0";
   late String numbersection;
   late String group;
   late String specialty;
@@ -43,6 +44,10 @@ class _CompletReqesterState extends State<CompletReqester> {
     prefshared.setString(
       "firstname",
       firstname,
+    );
+    prefshared.setString(
+      "rank",
+      rank,
     );
     prefshared.setString(
       "idmail",
@@ -205,8 +210,15 @@ class _CompletReqesterState extends State<CompletReqester> {
                             "fullname": widget.fullname,
                             "numbersection": numbersection,
                             "group": group,
-                            "specialty": specialty
-                          }).then((value) {
+                            "specialty": specialty,
+                            "rank" : "0",
+                          }).then((value) async{
+                            await FirebaseFirestore.instance
+                              .collection("allusers")
+                              .add({
+                            "idemail": widget.uid,
+                            "rank" : "0",
+                          });
                             saveshared();
                             Navigator.pushReplacement(
                                 context,

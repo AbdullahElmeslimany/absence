@@ -133,7 +133,7 @@ class _RegesterPageState extends State<RegesterPage> {
                         onPressed: () async {
                           await FirebaseAuth.instance
                               .createUserWithEmailAndPassword(
-                                  email: email!, password: password!)
+                                  email: email!, password: password!,)
                               .then((value) {
                             final user = FirebaseAuth.instance.currentUser;
                             if (user != null) {

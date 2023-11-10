@@ -7,7 +7,10 @@ import 'dart:convert';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class AddSection extends StatefulWidget {
-  const AddSection({super.key});
+  final idTeach;
+  final fullnameTeach;
+  const AddSection(
+      {super.key, required this.idTeach, required this.fullnameTeach});
 
   @override
   State<AddSection> createState() => _AddSectionState();
@@ -27,7 +30,7 @@ class _AddSectionState extends State<AddSection> {
   String? days;
   String? namesubject;
   String? numbersubject;
-  String? numbersction;
+  List<String> numbersction = [];
   List<String>? data;
   String? result;
   @override
@@ -59,7 +62,12 @@ class _AddSectionState extends State<AddSection> {
                 textAlign: TextAlign.end,
                 onChanged: (value) {
                   setState(() {
-                    nameteacher = value;
+                    if (value != null) {
+                      nameteacher = value;
+                    }
+                    else {
+                      nameteacher = widget.fullnameTeach;
+                    }
                   });
                 },
               ),
@@ -121,18 +129,42 @@ class _AddSectionState extends State<AddSection> {
                     fontSize: 20,
                     fontFamily: font2),
               ),
-              TextFormField(
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: "رقم السكشن",
-                ),
-                textAlign: TextAlign.end,
-                onChanged: (value) {
-                  setState(() {
-                    numbersction = value;
-                  });
-                },
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  SizedBox(
+                    width: MediaQuery.sizeOf(context).width / 2.2,
+                    child: TextFormField(
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: "رقم السكشن",
+                      ),
+                      textAlign: TextAlign.end,
+                      onChanged: (value) {
+                        setState(() {
+                          numbersction.add(value);
+                        });
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    width: MediaQuery.sizeOf(context).width / 2.2,
+                    child: TextFormField(
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: "رقم السكشن",
+                      ),
+                      textAlign: TextAlign.end,
+                      onChanged: (value) {
+                        setState(() {
+                          numbersction?.add(value);
+                        });
+                      },
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(
                 height: 17,
@@ -187,15 +219,15 @@ class _AddSectionState extends State<AddSection> {
 
                   final addRandom =
                       FirebaseFirestore.instance.collection('random').add({
-                    "idteacher": null,
-                    "nameteather": nameteacher,
+                    "idteacher": widget.idTeach,
+                    "nameteather": nameteacher!=null ? nameteacher:widget.fullnameTeach,
                     "nameSubject": namesubject,
                     "randomSubject": null
                   }).then((value) async {
                     // return print(value.id);
                     return await pref.add({
-                      "id": idtech,
-                      "nameteacher": nameteacher,
+                      "id": widget.idTeach,
+                      "nameteacher": nameteacher!=null ? nameteacher:widget.fullnameTeach,
                       "namesubject": namesubject,
                       "numbersubject": numbersubject,
                       "numbersection": numbersction,

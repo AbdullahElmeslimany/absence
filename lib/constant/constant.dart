@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 Color buttonColor = const Color.fromRGBO(255, 152, 0, 1);
+
+String rank = "0";
 String font1 = "Amiri";
 String font2 = "Molhim";
 Map test = {"name": "ali"};
@@ -44,16 +46,15 @@ Stream<QuerySnapshot> users = FirebaseFirestore.instance
     .orderBy("time", descending: false)
     .snapshots();
 
-Stream<QuerySnapshot> sectionsteaher = FirebaseFirestore.instance
-    .collection("section")
-    .where('id', isEqualTo: "2")
-    .snapshots();
 
-String section = "5-6";
-String namesubject = "5685";
+
+
+String section = "6";
+String namesubject = "200";
+
 Stream<QuerySnapshot> sectionsteaheractive = FirebaseFirestore.instance
     .collection("section")
-    .where('numbersection', isEqualTo: section)
+    .where('numbersection', arrayContains: section)
     .where("numbersubject", isEqualTo: namesubject)
     .snapshots();
 

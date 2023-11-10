@@ -1,36 +1,15 @@
 import 'package:absence/constant/constant.dart';
 import 'package:flutter/material.dart';
 
-class PersonData extends StatefulWidget {
+class PersionTeachData extends StatefulWidget {
   final data;
-  const PersonData({super.key, required this.data});
+  const PersionTeachData({super.key, required this.data});
 
   @override
-  State<PersonData> createState() => _PersonDataState();
+  State<PersionTeachData> createState() => _PersionTeachDataState();
 }
 
-class _PersonDataState extends State<PersonData> {
-  String? name;
-  String? specialty;
-  String? numbersection;
-  String? group;
-  setPass() {
-    setState(() {
-      name = widget.data[0]["name"];
-      specialty = widget.data[0]["specialty"];
-      numbersection = widget.data[0]["specialty"];
-      group = widget.data[0]["specialty"];
-    });
-  }
-
-  @override
-  void initState() {
-    setPass();
-    print(widget.data[0]["specialty"]);
-    // TODO: implement initState
-    super.initState();
-  }
-
+class _PersionTeachDataState extends State<PersionTeachData> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,12 +23,10 @@ class _PersonDataState extends State<PersonData> {
                   height: 30,
                 ),
                 Text(
-                 
-                  "بيانات الطالب",
+                  "بيانات المدرس",
                   style: TextStyle(
-                    
                       fontFamily: font1,
-                      fontSize: 45,
+                      fontSize: 40,
                       fontWeight: FontWeight.bold),
                 ),
                 Text(
@@ -67,7 +44,7 @@ class _PersonDataState extends State<PersonData> {
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     suffixText: ":  الاسم",
-                    prefixText: widget.data[0]["name"],
+                    prefixText: widget.data[0]["fullname"],
                     prefixIcon: const Icon(Icons.person),
                     border: const OutlineInputBorder(),
                     labelText: "الاسم",
@@ -100,49 +77,17 @@ class _PersonDataState extends State<PersonData> {
                 const SizedBox(
                   height: 30,
                 ),
-                TextFormField(
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                    border: const OutlineInputBorder(),
-                    labelText: "الفرقة",
-                    suffixText: ":  الفرقة",
-                    prefixIcon: const Icon(Icons.group),
-                    prefixText: widget.data[0]["group"],
-                  ),
-                  textAlign: TextAlign.end,
-                  onChanged: (value) {
-                    setState(() {
-                      value;
-                    });
-                  },
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                TextFormField(
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    border: const OutlineInputBorder(),
-                    labelText: "السكشن",
-                    suffixText: ":  السكشن",
-                    prefixIcon:
-                        const Icon(Icons.settings_accessibility_outlined),
-                    prefixText: widget.data[0]["numbersection"],
-                  ),
-                  textAlign: TextAlign.end,
-                  onChanged: (value) {
-                    setState(() {
-                      value;
-                    });
-                  },
-                ),
                 const SizedBox(
                   height: 30,
                 ),
                 MaterialButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    print("================odo");
+                    print(widget.data);
+                    print("================odo");
+                  },
                   child: Container(
-                    width: MediaQuery.sizeOf(context).width-40,
+                    width: MediaQuery.sizeOf(context).width - 40,
                     height: 45,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(25),

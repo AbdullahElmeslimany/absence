@@ -1,6 +1,9 @@
 import 'package:absence/LoginPage/regester.dart';
+import 'package:absence/constant/Shared.dart';
 import 'package:absence/constant/constant.dart';
+import 'package:absence/screens/homepage/assestant%20teach/teachhomepage.dart';
 import 'package:absence/screens/homepage/student/studenthomepage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -107,28 +110,62 @@ class _LoginPageState extends State<LoginPage> {
                               fontWeight: FontWeight.bold),
                         ),
                         onPressed: () async {
-                          await FirebaseAuth.instance
-                              .signInWithEmailAndPassword(
-                                  email: email!, password: password!)
-                              .then((value) {
-                            String uid = FirebaseAuth.instance.currentUser!.uid;
-                            prefs.setString("idmail", uid);
-                            prefs.setBool("repeat", true);
-                            print(
-                                "uid========================================================");
+                          try {
+                            await FirebaseAuth.instance
+                                .signInWithEmailAndPassword(
+                                    email: email!, password: password!)
+                                .then((value) async {
+                              String uid =
+                                  FirebaseAuth.instance.currentUser!.uid;
+                              prefs.setString("idmail", uid);
+                              prefs.setBool("repeat", true);
+                              print(prefs.getString("idmail"));
+                              print(uid);
 
-                            print(prefs.getString("idmail"));
-                            print(
-                                "uid=============================================");
-
-                            print(uid);
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      StudentHomePage(idmail: uid),
-                                ));
-                          });
+                              List checkData = [];
+                              await FirebaseFirestore.instance
+                                  .collection("allusers")
+                                  .where("idemail", isEqualTo: uid)
+                                  .get()
+                                  .then((value) async {
+                                checkData.addAll(value.docs);
+                                print(
+                                    "=============================================");
+                                print(checkData[0]["rank"]);
+                                print(
+                                    "=============================================");
+                                prefshared =
+                                    await SharedPreferences.getInstance();
+                                prefshared.setString(
+                                  "rank",
+                                  checkData[0]["rank"],
+                                );
+                              });
+                              if (checkData[0]["rank"] == "1") {
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          TechHomePage(idmail: uid),
+                                    ));
+                              } else if (checkData[0]["rank"] == "0") {
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          StudentHomePage(idmail: uid),
+                                    ));
+                              }
+                            });
+                          } on FirebaseAuthException catch (e) {
+                            if (e.code == 'user-not-found') {
+                              print('No user found for that email.');
+                              print('-=============================-=-=');
+                            } else if (e.code == 'wrong-password') {
+                              print('Wrong password provided for that user.');
+                              print('-=============================-=-=');
+                            }
+                          }
                         },
                       ),
                     ),
