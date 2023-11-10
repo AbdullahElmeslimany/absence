@@ -1,6 +1,10 @@
 import 'package:absence/LoginPage/regester.dart';
 import 'package:absence/constant/constant.dart';
+import 'package:absence/screens/homepage/student/studenthomepage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -10,6 +14,20 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  String? email;
+  String? password;
+  late SharedPreferences prefs;
+  savedSharedData() async {
+    prefs = await SharedPreferences.getInstance();
+  }
+
+  @override
+  void initState() {
+    savedSharedData();
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,14 +58,18 @@ class _LoginPageState extends State<LoginPage> {
                           fontFamily: font2),
                     ),
                     TextFormField(
-                    autofocus: true,
+                      autofocus: true,
                       keyboardType: TextInputType.emailAddress,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
-                        labelText: "الرقم القومي",
+                        labelText: "الاميل",
                       ),
                       textAlign: TextAlign.end,
-                      onChanged: (value) {},
+                      onChanged: (value) {
+                        setState(() {
+                          email = value;
+                        });
+                      },
                     ),
                     const SizedBox(
                       height: 17,
@@ -60,7 +82,11 @@ class _LoginPageState extends State<LoginPage> {
                         labelText: "الباسورد",
                       ),
                       textAlign: TextAlign.end,
-                      onChanged: (value) {},
+                      onChanged: (value) {
+                        setState(() {
+                          password = value;
+                        });
+                      },
                     ),
                     const SizedBox(
                       height: 30,
@@ -80,7 +106,30 @@ class _LoginPageState extends State<LoginPage> {
                               fontSize: 24,
                               fontWeight: FontWeight.bold),
                         ),
-                        onPressed: () async {},
+                        onPressed: () async {
+                          await FirebaseAuth.instance
+                              .signInWithEmailAndPassword(
+                                  email: email!, password: password!)
+                              .then((value) {
+                            String uid = FirebaseAuth.instance.currentUser!.uid;
+                            prefs.setString("idmail", uid);
+                            prefs.setBool("repeat", true);
+                            print(
+                                "uid========================================================");
+
+                            print(prefs.getString("idmail"));
+                            print(
+                                "uid=============================================");
+
+                            print(uid);
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      StudentHomePage(idmail: uid),
+                                ));
+                          });
+                        },
                       ),
                     ),
                   ],
@@ -90,7 +139,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 MaterialButton(
                   onPressed: () {
-                    Navigator.push(
+                    Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                           builder: (context) => const RegesterPage(),

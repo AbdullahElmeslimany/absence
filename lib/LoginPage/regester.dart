@@ -1,5 +1,7 @@
+import 'package:absence/LoginPage/completRegester.dart';
 import 'package:absence/LoginPage/login.dart';
 import 'package:absence/constant/constant.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class RegesterPage extends StatefulWidget {
@@ -10,6 +12,13 @@ class RegesterPage extends StatefulWidget {
 }
 
 class _RegesterPageState extends State<RegesterPage> {
+  String? name;
+  String? nationalID;
+  String? email;
+  String? password;
+
+  TextEditingController namecontrol = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,26 +49,35 @@ class _RegesterPageState extends State<RegesterPage> {
                           fontFamily: font2),
                     ),
                     TextFormField(
+                      controller: namecontrol,
                       autofocus: true,
                       keyboardType: TextInputType.emailAddress,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
-                        labelText: "الاسم رباعي",
+                        labelText: "الاسم رباعي باللغة العربية",
                       ),
                       textAlign: TextAlign.end,
-                      onChanged: (value) {},
+                      onChanged: (value) {
+                        setState(() {
+                          name = value;
+                        });
+                      },
                     ),
                     const SizedBox(
                       height: 17,
                     ),
                     TextFormField(
-                      keyboardType: TextInputType.emailAddress,
+                      keyboardType: TextInputType.number,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
-                        labelText: "الرقم القومي",
+                        labelText: "الرقم القومي بالانجليزية",
                       ),
                       textAlign: TextAlign.end,
-                      onChanged: (value) {},
+                      onChanged: (value) {
+                        setState(() {
+                          nationalID = value;
+                        });
+                      },
                     ),
                     const SizedBox(
                       height: 17,
@@ -71,13 +89,16 @@ class _RegesterPageState extends State<RegesterPage> {
                         labelText: "الاميل",
                       ),
                       textAlign: TextAlign.end,
-                      onChanged: (value) {},
+                      onChanged: (value) {
+                        setState(() {
+                          email = value;
+                        });
+                      },
                     ),
                     const SizedBox(
                       height: 17,
                     ),
                     TextFormField(
-                      
                       obscureText: true,
                       keyboardType: TextInputType.visiblePassword,
                       decoration: const InputDecoration(
@@ -85,7 +106,11 @@ class _RegesterPageState extends State<RegesterPage> {
                         labelText: "الباسورد",
                       ),
                       textAlign: TextAlign.end,
-                      onChanged: (value) {},
+                      onChanged: (value) {
+                        setState(() {
+                          password = value;
+                        });
+                      },
                     ),
                     const SizedBox(
                       height: 30,
@@ -105,7 +130,27 @@ class _RegesterPageState extends State<RegesterPage> {
                               fontSize: 21,
                               fontWeight: FontWeight.bold),
                         ),
-                        onPressed: () async {},
+                        onPressed: () async {
+                          await FirebaseAuth.instance
+                              .createUserWithEmailAndPassword(
+                                  email: email!, password: password!)
+                              .then((value) {
+                            final user = FirebaseAuth.instance.currentUser;
+                            if (user != null) {
+                              final uid = user.uid;
+                              print(uid);
+                              
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => CompletReqester(
+                                        uid: uid,
+                                        fullname: name,
+                                        nationalID: nationalID),
+                                  ));
+                            }
+                          });
+                        },
                       ),
                     ),
                   ],
@@ -115,7 +160,7 @@ class _RegesterPageState extends State<RegesterPage> {
                 ),
                 MaterialButton(
                   onPressed: () {
-                    Navigator.push(
+                    Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                           builder: (context) => const LoginPage(),
@@ -125,7 +170,7 @@ class _RegesterPageState extends State<RegesterPage> {
                     width: 120,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(25),
-                      color: const Color.fromARGB(255, 11, 185, 1),
+                      color: Color.fromARGB(255, 52, 99, 49),
                     ),
                     child: const Center(
                       child: Text(

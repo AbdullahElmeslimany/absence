@@ -39,22 +39,22 @@ class DrawerPage extends StatelessWidget {
                 ));
           },
         ),
-        InkWell(
-          child: ListTile(
-            leading: Icon(Icons.co_present_outlined, size: 26),
-            title: Text(
-              'الطالب',
-              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
-            ),
-          ),
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => StudentHomePage(),
-                ));
-          },
-        ),
+        // InkWell(
+        //   child: ListTile(
+        //     leading: Icon(Icons.co_present_outlined, size: 26),
+        //     title: Text(
+        //       'الطالب',
+        //       style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+        //     ),
+        //   ),
+        //   onTap: () {
+        //     // Navigator.push(
+        //     //     context,
+        //     //     MaterialPageRoute(
+        //     //       builder: (context) => StudentHomePage(),
+        //     //     ));
+        //   },
+        // ),
       ],
     ));
   }
