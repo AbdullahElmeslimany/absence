@@ -1,16 +1,16 @@
-import 'dart:convert';
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:absence/constant/constant.dart';
-import 'package:absence/constant/encryptprossing.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:qr_scanner_overlay/qr_scanner_overlay.dart';
+import 'package:vibration/vibration.dart';
 
 class StudentAttendance extends StatefulWidget {
   final subjectname;
-  const StudentAttendance({super.key, required this.subjectname});
+  final dataStudent;
+  const StudentAttendance(
+      {super.key, required this.subjectname, required this.dataStudent});
 
   @override
   State<StudentAttendance> createState() => _StudentAttendanceState();
@@ -22,38 +22,46 @@ class _StudentAttendanceState extends State<StudentAttendance> {
   bool active = false;
   String? latecode;
   List datagetrandom = [];
+
   // late DocumentSnapshot getdata;
   void colseScreen() {
     isScanCompleted = false;
   }
 
-  List dataSection = [];
   getdatasection() async {
-    QuerySnapshot qury =
-        await FirebaseFirestore.instance.collection("section").get();
+    List dataSection = [];
+    QuerySnapshot qury = await FirebaseFirestore.instance
+        .collection("section")
+        .where("group", isEqualTo: widget.dataStudent[0]["group"])
+        .where("numbersection",
+            arrayContains: widget.dataStudent[0]["numbersection"])
+        .get();
     setState(() {
       dataSection.addAll(qury.docs);
     });
-    print(dataSection[0]["idRandom"]);
-  }
+    print("=========================================data");
 
-  getdataforRandom() async {
-    // Eroooooooooooorr
-    DocumentReference refrandom = FirebaseFirestore.instance
+    print(dataSection[0]["idRandom"]);
+    print("===++++++++++++++++++++++++++++++++++++=====data");
+
+    DocumentSnapshot refrandom = await FirebaseFirestore.instance
         .collection('random')
-        .doc(dataSection[0]["idRandom"]);
-    DocumentSnapshot getdata = await refrandom.get();
+        .doc(dataSection[0]["idRandom"])
+        .get();
+    // .doc(dataSection[0]["idRandom"]);
     setState(() {
-      datagetrandom.add(getdata);
+      datagetrandom.add(refrandom);
     });
+    print("=========================================data");
+
     print(datagetrandom[0]["randomSubject"]);
-    print(datagetrandom[0]["randomSubject"].runtimeType);
+    print("===++++++++++++++++++++++++++++++++++++=====data");
   }
 
   @override
   void initState() {
     getdatasection();
-    // getdataforRandom();
+
     super.initState();
   }
 
@@ -119,6 +127,19 @@ class _StudentAttendanceState extends State<StudentAttendance> {
                         });
                         if (datagetrandom[0]["randomSubject"].toString() ==
                             latecode.toString()) {
+                          Vibration.vibrate(duration: 350, amplitude: 128);
+                          AwesomeDialog(
+                            context: context,
+                            dialogType: DialogType.success,
+                            animType: AnimType.bottomSlide,
+                            title: 'تم تسجيل حضورك بنجاح',
+                            // desc: 'Dialog description here.............',
+
+                            btnOkOnPress: () {
+                              Navigator.pop(context);
+                            },
+                          ).show();
+
                           setState(() {
                             active = true;
                           });
@@ -129,7 +150,27 @@ class _StudentAttendanceState extends State<StudentAttendance> {
                               .update({"type": true});
                           print("sucess");
                         } else {
-                          print("Faild");
+                          // Vibration.vibrate(pattern: [500, 0, 0, 200]);
+                          AwesomeDialog(
+                            context: context,
+                            dialogType: DialogType.error,
+                            animType: AnimType.bottomSlide,
+                            title: 'لم  يتم تسجيل حضورك اعد المحاولة',
+                            // desc: 'Dialog description here.............',
+                            btnCancelText: "الرجوع",
+                            btnCancelOnPress: () {
+                              Navigator.pop(context);
+                            },
+                            // btnOkOnPress: () {
+                            //   Navigator.pushReplacement(
+                            //       context,
+                            //       MaterialPageRoute(
+                            //         builder: (context) => StudentAttendance(
+                            //             subjectname: widget.subjectname,
+                            //             dataStudent: widget.dataStudent),
+                            //       ));
+                            // },
+                          ).show();
                         }
                       }
                     },
@@ -147,11 +188,11 @@ class _StudentAttendanceState extends State<StudentAttendance> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.only(top:5.0),
+                padding: const EdgeInsets.only(top: 5.0),
                 child: Container(
                   height: 100,
                   alignment: Alignment.center,
-                  width:  MediaQuery.sizeOf(context).width,
+                  width: MediaQuery.sizeOf(context).width,
                   decoration: const BoxDecoration(
                       color: Color.fromARGB(255, 81, 94, 129),
                       borderRadius: BorderRadius.only(
@@ -161,7 +202,8 @@ class _StudentAttendanceState extends State<StudentAttendance> {
                           bottomRight: Radius.circular(15))),
                   child: Text(
                     widget.subjectname,
-                    style: TextStyle(color: Colors.white,
+                    style: TextStyle(
+                        color: Colors.white,
                         fontWeight: FontWeight.bold,
                         fontSize: MediaQuery.sizeOf(context).width / 11),
                   ),

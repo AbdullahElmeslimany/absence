@@ -29,10 +29,18 @@ class _AddSectionState extends State<AddSection> {
   String? time;
   String? days;
   String? namesubject;
-  String? numbersubject;
+  // String? numbersubject;
   List<String> numbersction = [];
   List<String>? data;
   String? result;
+  late String group;
+  List<String> groupchoose = [
+    "الفرقة الاولي",
+    "الفرقة الثانية",
+    "الفرقة الثالثة",
+    "الفرقة الرابعة"
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,8 +72,7 @@ class _AddSectionState extends State<AddSection> {
                   setState(() {
                     if (value != null) {
                       nameteacher = value;
-                    }
-                    else {
+                    } else {
                       nameteacher = widget.fullnameTeach;
                     }
                   });
@@ -75,26 +82,34 @@ class _AddSectionState extends State<AddSection> {
                 height: 17,
               ),
               Text(
-                "كود المادة",
+                "اختر الفرقة",
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
                     fontFamily: font2),
               ),
-              TextFormField(
-                autofocus: true,
-                keyboardType: TextInputType.name,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: "كود المادة",
-                ),
-                textAlign: TextAlign.end,
-                onChanged: (value) {
-                  setState(() {
-                    numbersubject = value;
-                  });
-                },
-              ),
+              DropdownMenu(
+                  label: Text(
+                    "اختر الفرقة",
+                    style: TextStyle(
+                        fontFamily: font2,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue),
+                  ),
+                  width: MediaQuery.sizeOf(context).width - 30,
+                  initialSelection: groupchoose.first,
+                  onSelected: (String? value) {
+                    // This is called when the user selects an item.
+                    setState(() {
+                      group = value!;
+                    });
+                  },
+                  dropdownMenuEntries: groupchoose
+                      .map<DropdownMenuEntry<String>>((String value) {
+                    return DropdownMenuEntry<String>(
+                        value: value, label: value);
+                  }).toList()),
               const SizedBox(
                 height: 17,
               ),
@@ -220,16 +235,22 @@ class _AddSectionState extends State<AddSection> {
                   final addRandom =
                       FirebaseFirestore.instance.collection('random').add({
                     "idteacher": widget.idTeach,
-                    "nameteather": nameteacher!=null ? nameteacher:widget.fullnameTeach,
+                    "group": group,
+                    "nameteather": nameteacher != null
+                        ? nameteacher
+                        : widget.fullnameTeach,
                     "nameSubject": namesubject,
+                    "numbersection": numbersction,
                     "randomSubject": null
                   }).then((value) async {
                     // return print(value.id);
                     return await pref.add({
                       "id": widget.idTeach,
-                      "nameteacher": nameteacher!=null ? nameteacher:widget.fullnameTeach,
+                      "nameteacher": nameteacher != null
+                          ? nameteacher
+                          : widget.fullnameTeach,
                       "namesubject": namesubject,
-                      "numbersubject": numbersubject,
+                      "group": group,
                       "numbersection": numbersction,
                       "dataday": dataday,
                       "datasubject": datasubject,

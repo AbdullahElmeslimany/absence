@@ -136,8 +136,8 @@ class _AttendanceRecordPageState extends State<AttendanceRecordPage> {
                                                   color: Colors.red),
                                             ),
                                     ),
-                                    subtitle:
-                                        Text(snapshot.data!.docs[index]["age"]),
+                                    // subtitle:
+                                    //     Text(snapshot.data!.docs[index]["age"]),
                                     title: Text(
                                         snapshot.data!.docs[index]["name"])),
                               ),

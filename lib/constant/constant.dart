@@ -49,14 +49,14 @@ Stream<QuerySnapshot> users = FirebaseFirestore.instance
 
 
 
-String section = "6";
-String namesubject = "200";
+// String section = "6";
+// String namesubject = "200";
 
-Stream<QuerySnapshot> sectionsteaheractive = FirebaseFirestore.instance
-    .collection("section")
-    .where('numbersection', arrayContains: section)
-    .where("numbersubject", isEqualTo: namesubject)
-    .snapshots();
+// Stream<QuerySnapshot> sectionsteaheractive = FirebaseFirestore.instance
+//     .collection("section")
+//     .where('numbersection', arrayContains: section)
+//     .where("numbersubject", isEqualTo: namesubject)
+//     .snapshots();
 
 
 // كود العشوائي

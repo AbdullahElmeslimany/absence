@@ -29,7 +29,7 @@ class StudentHomePage extends StatefulWidget {
 }
 
 class _StudentHomePageState extends State<StudentHomePage> {
-  bool enable = false;
+  bool enable = true;
   bool latetime = true;
   List datasubject = [];
   getsubject() async {
@@ -70,6 +70,18 @@ class _StudentHomePageState extends State<StudentHomePage> {
     // print(studentdata[0]["name"]);
   }
 
+  late Stream<QuerySnapshot> sectionsteaheractive;
+  getstream() {
+    sectionsteaheractive = FirebaseFirestore.instance
+        .collection("section")
+        .where('numbersection', arrayContains: widget.section)
+        .where("group", isEqualTo: widget.group)
+        .snapshots();
+    setState(() {
+      enable = false;
+    });
+  }
+
   @override
   void initState() {
     getdata();
@@ -84,11 +96,8 @@ class _StudentHomePageState extends State<StudentHomePage> {
     print("id ++-+-+-+-+----+-+-+");
     print(idusershared);
     print("id ++-+-+----+-+----+-+-+");
+    getstream();
 
-
-   
-
-    
     super.initState();
   }
 
@@ -107,7 +116,30 @@ class _StudentHomePageState extends State<StudentHomePage> {
                 title: Padding(
                   padding: const EdgeInsets.only(left: 50.0),
                   child: Center(
-                      child: Text("مرحبا بك  ${studentdata[0]["name"]}")),
+                      child: InkWell(
+                          onTap: () async {
+                            List datagetrandom = [];
+
+                            // Eroooooooooooorr
+                            DocumentSnapshot refrandom = await FirebaseFirestore
+                                .instance
+                                .collection('random')
+                                .doc("a43pOlfm0a7WZLDopnim")
+                                .get();
+                            // .doc(dataSection[0]["idRandom"]);
+                            setState(() {
+                              datagetrandom.add(refrandom);
+                            });
+
+                            
+                            print(
+                                "=========================================data");
+                            print(datagetrandom[0]["randomSubject"]);
+                            // print(datagetrandom[0]["randomSubject"].runtimeType);
+                            print(
+                                "===++++++++++++++++++++++++++++++++++++=====data");
+                          },
+                          child: Text("مرحبا بك  ${studentdata[0]["name"]}"))),
                 )),
             body: Padding(
               padding: const EdgeInsets.only(top: 20.0),
@@ -115,89 +147,193 @@ class _StudentHomePageState extends State<StudentHomePage> {
                 stream: sectionsteaheractive,
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasError) {
+                    return Text("erorr");
+                  }
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+
                   return ListView.builder(
-                    itemCount: subjectClasses["firstterm"]["Informationsystems"]
-                            ["second"]
-                        .length,
-                    itemBuilder: (BuildContext context, int index) {
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
                       return InkWell(
-                        onTap: ()  {
-                          
-                     
-                           {
-                            print(subjectClasses["firstterm"]
-                                    ["Informationsystems"]["second"][index]
-                                ["subject"]);
-                            print(subjectClasses["firstterm"]
-                                    ["Informationsystems"]["second"][index]
-                                ["code"]);
-                            setState(() {
-                              namesubject = subjectClasses["firstterm"]
-                                      ["Informationsystems"]["second"][index]
-                                  ["code"];
-                            });
-                            if (snapshot.data!.docs[0]["active"] == true &&
-                                snapshot.data!.docs[0]["numbersubject"] ==
-                                    subjectClasses["firstterm"]
-                                            ["Informationsystems"]["second"]
-                                        [index]["code"]) {
+                          onTap: () {
+                            if (snapshot.data!.docs[0]["active"] == true) {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => StudentAttendance(
-                                        subjectname: subjectClasses["firstterm"]
-                                                ["Informationsystems"]["second"]
-                                            [index]["subject"]),
-                                  ));
+                                      builder: (context) => StudentAttendance(
+                                            dataStudent: studentdata,
+                                            subjectname: snapshot.data!
+                                                .docs[index]["namesubject"],
+                                          )));
+                            } else {
+                              print("غير متاج");
                             }
-                          }
-                        },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Container(
-                                padding: EdgeInsetsDirectional.symmetric(
-                                    horizontal: 20),
-                                alignment: Alignment.centerRight,
-                                height: 70,
-                                width: MediaQuery.sizeOf(context).width - 20,
-                                decoration: BoxDecoration(color: Colors.white),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    enable == true
-                                        ? Icon(
-                                            Icons.check_circle_outlined,
-                                            color:
-                                                Color.fromARGB(255, 2, 136, 53),
-                                            size: 30,
-                                            weight: 50,
-                                          )
-                                        : Icon(
-                                            Icons.person_add_disabled_sharp,
-                                            color: Colors.grey,
-                                            size: 30,
-                                          ),
-                                    Text(
-                                      subjectClasses["firstterm"]
-                                              ["Informationsystems"]["second"]
-                                          [index]["subject"],
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                )),
-                            SizedBox(
-                              height: 7,
-                            )
-                          ],
-                        ),
-                      );
+                          },
+                          child: Container(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Container(
+                                    padding: EdgeInsetsDirectional.symmetric(
+                                        horizontal: 20),
+                                    alignment: Alignment.centerRight,
+                                    height: 70,
+                                    width:
+                                        MediaQuery.sizeOf(context).width - 20,
+                                    decoration:
+                                        BoxDecoration(color: Colors.white),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        snapshot.data!.docs[index]["active"] ==
+                                                true
+                                            ? Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  Icon(
+                                                    Icons.check_circle_outlined,
+                                                    color: Color.fromARGB(
+                                                        255, 2, 136, 53),
+                                                    size: 30,
+                                                    weight: 50,
+                                                  ),
+                                                  Text(
+                                                    "متاح",
+                                                    style: TextStyle(
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  )
+                                                ],
+                                              )
+                                            : Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  Icon(
+                                                    Icons
+                                                        .person_add_disabled_sharp,
+                                                    color: Colors.grey,
+                                                    size: 30,
+                                                  ),
+                                                  Text(
+                                                    "غير متاح",
+                                                    style: TextStyle(
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  )
+                                                ],
+                                              ),
+                                        Text(
+                                          snapshot.data!.docs[index]
+                                              ["namesubject"],
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    )),
+                                SizedBox(
+                                  height: 7,
+                                )
+                              ],
+                            ),
+                          )
+
+                          // Text(snapshot.data!.docs[index]["namesubject"]),
+                          );
                     },
                   );
+
+                  //  ListView.builder(
+                  //   itemCount: subjectClasses["firstterm"]["Informationsystems"]
+                  //           ["second"]
+                  //       .length,
+                  //   itemBuilder: (BuildContext context, int index) {
+                  //     return InkWell(
+                  //       onTap: ()  {
+
+                  //          {
+                  //           print(subjectClasses["firstterm"]
+                  //                   ["Informationsystems"]["second"][index]
+                  //               ["subject"]);
+                  //           print(subjectClasses["firstterm"]
+                  //                   ["Informationsystems"]["second"][index]
+                  //               ["code"]);
+                  //           setState(() {
+                  //             namesubject = subjectClasses["firstterm"]
+                  //                     ["Informationsystems"]["second"][index]
+                  //                 ["code"];
+                  //           });
+                  //           if (snapshot.data!.docs[0]["active"] == true &&
+                  //               snapshot.data!.docs[0]["numbersubject"] ==
+                  //                   subjectClasses["firstterm"]
+                  //                           ["Informationsystems"]["second"]
+                  //                       [index]["code"]) {
+                  //             Navigator.push(
+                  //                 context,
+                  //                 MaterialPageRoute(
+                  //                   builder: (context) => StudentAttendance(
+                  //                       subjectname: subjectClasses["firstterm"]
+                  //                               ["Informationsystems"]["second"]
+                  //                           [index]["subject"]),
+                  //                 ));
+                  //           }
+                  //         }
+                  //       },
+                  //       child: Column(
+                  //         mainAxisAlignment: MainAxisAlignment.end,
+                  //         crossAxisAlignment: CrossAxisAlignment.stretch,
+                  //         children: [
+                  //           Container(
+                  //               padding: EdgeInsetsDirectional.symmetric(
+                  //                   horizontal: 20),
+                  //               alignment: Alignment.centerRight,
+                  //               height: 70,
+                  //               width: MediaQuery.sizeOf(context).width - 20,
+                  //               decoration: BoxDecoration(color: Colors.white),
+                  //               child: Row(
+                  //                 mainAxisAlignment:
+                  //                     MainAxisAlignment.spaceBetween,
+                  //                 children: [
+                  //                   enable == true
+                  //                       ? Icon(
+                  //                           Icons.check_circle_outlined,
+                  //                           color:
+                  //                               Color.fromARGB(255, 2, 136, 53),
+                  //                           size: 30,
+                  //                           weight: 50,
+                  //                         )
+                  //                       : Icon(
+                  //                           Icons.person_add_disabled_sharp,
+                  //                           color: Colors.grey,
+                  //                           size: 30,
+                  //                         ),
+                  //                   Text(
+                  //                     subjectClasses["firstterm"]
+                  //                             ["Informationsystems"]["second"]
+                  //                         [index]["subject"],
+                  //                     style: TextStyle(
+                  //                         fontSize: 20,
+                  //                         fontWeight: FontWeight.bold),
+                  //                   ),
+                  //                 ],
+                  //               )),
+                  //           SizedBox(
+                  //             height: 7,
+                  //           )
+                  //         ],
+                  //       ),
+                  //     );
+                  //   },
+                  // );
                 },
               ),
             ),
