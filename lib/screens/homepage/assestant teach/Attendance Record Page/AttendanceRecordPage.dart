@@ -1,9 +1,5 @@
-import 'dart:convert';
-
-import 'package:absence/constant/constant.dart';
-import 'package:absence/constant/encryptprossing.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:encrypt/encrypt.dart' as encrypt;
+
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -24,22 +20,21 @@ class AttendanceRecordPage extends StatefulWidget {
 }
 
 class _AttendanceRecordPageState extends State<AttendanceRecordPage> {
-  // late final encrypt;
+  late Stream<QuerySnapshot> userstudent;
   @override
   void initState() {
-    // setState(() {
-    //   encrypt = MyEncryption.encryptAES(json.encode(widget.mapdata[0]));
-    print("===================================== encrypt");
-    print(widget.mapdata["id"]);
-    // print(json.encode(widget.mapdata[0]));
+    userstudent =
+        FirebaseFirestore.instance.collection("usersStudent").snapshots();
 
     print("===================================== encrypt");
-    // });
+    print(widget.mapdata["id"]);
+
+    print("===================================== encrypt");
+
     print(widget.idteach);
     print("===================================== map");
-    // print(widget.mapdata[0]["nameteacher"]);
+
     print(DateTime.now());
-    // print(MyEncryption.decryptAES(encrypt));
 
     super.initState();
   }
@@ -49,7 +44,7 @@ class _AttendanceRecordPageState extends State<AttendanceRecordPage> {
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
-          actions: [
+          actions: const [
             Center(
                 child: Text(
               " :  تسجيل حضور ",
@@ -64,8 +59,6 @@ class _AttendanceRecordPageState extends State<AttendanceRecordPage> {
           ))),
       body: SingleChildScrollView(
         child: Column(
-          // mainAxisAlignment: MainAxisAlignment.center,
-          // crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(
               height: 20,
@@ -80,7 +73,33 @@ class _AttendanceRecordPageState extends State<AttendanceRecordPage> {
                     ),
                   ),
             const SizedBox(
-              height: 40,
+              height: 20,
+            ),
+            MaterialButton(
+              onPressed: () {
+                FirebaseFirestore.instance
+                    .collection("section")
+                    .doc(widget.idteach)
+                    .update({"active": false}).then(
+                        (value) => Navigator.pop(context));
+              },
+              child: Container(
+                width: MediaQuery.sizeOf(context).width - 20,
+                height: 50,
+                decoration: BoxDecoration(
+                    color: Colors.red, borderRadius: BorderRadius.circular(20)),
+                child: const Center(
+                    child: Text(
+                  "انهاء الحضور",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold),
+                )),
+              ),
+            ),
+            const SizedBox(
+              height: 20,
             ),
             Container(
               decoration: BoxDecoration(
@@ -96,7 +115,7 @@ class _AttendanceRecordPageState extends State<AttendanceRecordPage> {
                   SizedBox(
                     height: 1000,
                     child: StreamBuilder(
-                      stream: users,
+                      stream: userstudent,
                       builder: (BuildContext context,
                           AsyncSnapshot<QuerySnapshot> snapshot) {
                         if (snapshot.hasError) {
@@ -108,7 +127,7 @@ class _AttendanceRecordPageState extends State<AttendanceRecordPage> {
                         }
 
                         return ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
+                          physics: const NeverScrollableScrollPhysics(),
                           itemCount: snapshot.data!.docs.length,
                           itemBuilder: (BuildContext context, int index) {
                             return Padding(
@@ -116,28 +135,27 @@ class _AttendanceRecordPageState extends State<AttendanceRecordPage> {
                                   const EdgeInsets.symmetric(horizontal: 10),
                               child: Card(
                                 child: ListTile(
-                                    leading: MaterialButton(
-                                      onPressed: () {},
-                                      child: snapshot.data!.docs[index]
-                                                  ["type"] ==
-                                              true
-                                          ? const Text(
-                                              "حضر",
-                                              style: TextStyle(
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.greenAccent),
-                                            )
-                                          : const Text(
-                                              "غائب",
-                                              style: TextStyle(
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.red),
-                                            ),
-                                    ),
-                                    // subtitle:
-                                    //     Text(snapshot.data!.docs[index]["age"]),
+                                    // leading: MaterialButton(
+                                    //   onPressed: () {},
+                                    //   child: snapshot.data!.docs[index]
+                                    //               ["type"] ==
+                                    //           true
+                                    //       ? const Text(
+                                    //           "حضر",
+                                    //           style: TextStyle(
+                                    //               fontSize: 18,
+                                    //               fontWeight: FontWeight.bold,
+                                    //               color: Colors.greenAccent),
+                                    //         )
+                                    //       : const Text(
+                                    //           "غائب",
+                                    //           style: TextStyle(
+                                    //               fontSize: 18,
+                                    //               fontWeight: FontWeight.bold,
+                                    //               color: Colors.red),
+                                    //         ),
+                                    // ),
+
                                     title: Text(
                                         snapshot.data!.docs[index]["name"])),
                               ),

@@ -9,8 +9,12 @@ import 'package:vibration/vibration.dart';
 class StudentAttendance extends StatefulWidget {
   final subjectname;
   final dataStudent;
+  final idRandom;
   const StudentAttendance(
-      {super.key, required this.subjectname, required this.dataStudent});
+      {super.key,
+      required this.subjectname,
+      required this.dataStudent,
+      required this.idRandom});
 
   @override
   State<StudentAttendance> createState() => _StudentAttendanceState();
@@ -41,19 +45,19 @@ class _StudentAttendanceState extends State<StudentAttendance> {
     });
     print("=========================================data");
 
-    print(dataSection[0]["idRandom"]);
     print("===++++++++++++++++++++++++++++++++++++=====data");
 
     DocumentSnapshot refrandom = await FirebaseFirestore.instance
         .collection('random')
-        .doc(dataSection[0]["idRandom"])
+        .doc(widget.idRandom)
         .get();
-    // .doc(dataSection[0]["idRandom"]);
+
     setState(() {
       datagetrandom.add(refrandom);
     });
     print("=========================================data");
 
+    print(widget.idRandom);
     print(datagetrandom[0]["randomSubject"]);
     print("===++++++++++++++++++++++++++++++++++++=====data");
   }
@@ -75,33 +79,7 @@ class _StudentAttendanceState extends State<StudentAttendance> {
             "تسجيل حضور مادة",
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
           ))),
-      body:
-
-          //  Column(
-          //   mainAxisAlignment: MainAxisAlignment.center,
-          //   crossAxisAlignment: CrossAxisAlignment.center,
-          //   children: [
-          //     Padding(
-          //       padding: const EdgeInsets.only(top: 25.0, bottom: 30),
-          //       child: Container(
-          //         alignment: AlignmentDirectional.center,
-          //         width: MediaQuery.sizeOf(context).width - 30,
-          //         decoration: const BoxDecoration(
-          //             color: Colors.amber,
-          //             borderRadius: BorderRadius.only(
-          //                 topLeft: Radius.circular(15),
-          //                 bottomLeft: Radius.circular(30),
-          //                 topRight: Radius.circular(30),
-          //                 bottomRight: Radius.circular(15))),
-          //         child: Text(
-          //           widget.subjectname,
-          //           style: TextStyle(
-          //               fontWeight: FontWeight.bold,
-          //               fontSize: MediaQuery.sizeOf(context).width / 11),
-          //         ),
-          //       ),
-          //     ),
-          Stack(
+      body: Stack(
         children: [
           Center(
               child: Stack(
@@ -133,8 +111,9 @@ class _StudentAttendanceState extends State<StudentAttendance> {
                             dialogType: DialogType.success,
                             animType: AnimType.bottomSlide,
                             title: 'تم تسجيل حضورك بنجاح',
-                            // desc: 'Dialog description here.............',
-
+                            desc: '${widget.subjectname}',
+                            descTextStyle: const TextStyle(
+                                fontSize: 24, fontWeight: FontWeight.bold),
                             btnOkOnPress: () {
                               Navigator.pop(context);
                             },
@@ -161,15 +140,6 @@ class _StudentAttendanceState extends State<StudentAttendance> {
                             btnCancelOnPress: () {
                               Navigator.pop(context);
                             },
-                            // btnOkOnPress: () {
-                            //   Navigator.pushReplacement(
-                            //       context,
-                            //       MaterialPageRoute(
-                            //         builder: (context) => StudentAttendance(
-                            //             subjectname: widget.subjectname,
-                            //             dataStudent: widget.dataStudent),
-                            //       ));
-                            // },
                           ).show();
                         }
                       }
@@ -194,7 +164,7 @@ class _StudentAttendanceState extends State<StudentAttendance> {
                   alignment: Alignment.center,
                   width: MediaQuery.sizeOf(context).width,
                   decoration: const BoxDecoration(
-                      color: Color.fromARGB(255, 81, 94, 129),
+                      color: Color.fromARGB(255, 5, 10, 39),
                       borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(15),
                           bottomLeft: Radius.circular(30),
@@ -213,12 +183,6 @@ class _StudentAttendanceState extends State<StudentAttendance> {
           ),
         ],
       ),
-      // if (latecode == null && active != true)
-      //   Container()
-      // else
-      //   Text("تم تسجيل بنجاح")
-      //   ],
-      // )
     );
   }
 }
