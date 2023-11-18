@@ -3,8 +3,7 @@ import 'package:absence/screens/homepage/assestant%20teach/table/tableday.dart';
 import 'package:absence/screens/homepage/assestant%20teach/table/tablesubject.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:qr_flutter/qr_flutter.dart';
+
 
 class AddSection extends StatefulWidget {
   final idTeach;
@@ -191,7 +190,7 @@ class _AddSectionState extends State<AddSection> {
                     fontSize: 20,
                     fontFamily: font2),
               ),
-              TableSubject(),
+              const TableSubject(),
               const SizedBox(
                 height: 15,
               ),
@@ -199,7 +198,7 @@ class _AddSectionState extends State<AddSection> {
                 "اليوم",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
-              TableDay(),
+              const TableDay(),
               const SizedBox(
                 height: 15,
               ),
@@ -223,14 +222,7 @@ class _AddSectionState extends State<AddSection> {
                           color: Colors.white),
                     ))),
                 onPressed: () async {
-                  // setState(() {
-                  //   result =
-                  //       '{"id":$idtech, \n"nameteacher":$nameteacher, \n "namesubject":$namesubject, \n "numbersubject":$numbersubject, \n "dataday":$dataday, \n "datasubject":$datasubject \n }';
-                  //   convertmap = jsonDecode(result!);
-                  // });
-                  // print(result);
-                  // if (result != null) {
-                  // await pref.add({"section": convertmap});
+              
 
                   final addRandom =
                       FirebaseFirestore.instance.collection('random').add({

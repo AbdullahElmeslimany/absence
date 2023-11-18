@@ -1,5 +1,5 @@
 import 'package:encrypt/encrypt.dart' as encrypt;
-import 'package:flutter/material.dart';
+
 
 class MyEncryption {
   final plainText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit';

@@ -5,7 +5,7 @@ import 'package:absence/screens/homepage/assestant%20teach/teachhomepage.dart';
 import 'package:absence/screens/homepage/student/studenthomepage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -142,6 +142,7 @@ class _LoginPageState extends State<LoginPage> {
                                 );
                               });
                               if (checkData[0]["rank"] == "1") {
+                                // ignore: use_build_context_synchronously
                                 Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
@@ -149,6 +150,7 @@ class _LoginPageState extends State<LoginPage> {
                                           TechHomePage(idmail: uid),
                                     ));
                               } else if (checkData[0]["rank"] == "0") {
+                                // ignore: use_build_context_synchronously
                                 Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(

@@ -1,14 +1,10 @@
-import 'package:absence/LoginPage/completRegester.dart';
 import 'package:absence/LoginPage/login.dart';
-import 'package:absence/constant/Shared.dart';
+
 import 'package:absence/constant/constant.dart';
 import 'package:absence/screens/homepage/assestant%20teach/teachhomepage.dart';
-import 'package:absence/screens/homepage/student/StudentAttendanceCamira.dart';
+
 import 'package:absence/screens/homepage/student/studenthomepage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:absence/testapp/conectstream.dart';
-import 'package:absence/testapp/test1.dart';
-import 'package:absence/testapp/test2.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 
@@ -61,7 +57,6 @@ class MyApp extends StatelessWidget {
                     specialty: specialty,
                   )
                 : TechHomePage(idmail: id)
-            : const LoginPage()
-            );
+            : const LoginPage());
   }
 }

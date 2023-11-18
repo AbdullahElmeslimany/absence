@@ -29,7 +29,7 @@ class _TechHomePageState extends State<TechHomePage> {
       loading = false;
       print("========");
     });
-    // print(dataTeach[0]["fullname"]);
+   
   }
 
   @override
@@ -55,16 +55,16 @@ class _TechHomePageState extends State<TechHomePage> {
                 fullnameTeach: dataTeach[0]["fullname"]),
             appBar: AppBar(
                 backgroundColor: Colors.blueGrey,
-                title: Center(child: Text("مرحبا ${dataTeach[0]["name"]}"))),
+                title: Center(child: Text("مرحبا م.${dataTeach[0]["name"]}"))),
             body: StreamBuilder(
               stream: sectionsteaher,
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.hasError) {
-                  return Text("erorr");
+                  return const Text("erorr");
                 }
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 }
 
                 return ListView.builder(
@@ -72,34 +72,34 @@ class _TechHomePageState extends State<TechHomePage> {
                   itemBuilder: (BuildContext context, int index) {
                     return InkWell(
                       onTap: () async {
-                        print("testttttttttttttttttttttttttttttttt");
-                        print(snapshot.data!.docs[index]);
-                        print(snapshot.data!.docs[index]["active"]);
-                        print("testttttttttttttttttttttttttttttttt");
-                        if (snapshot.data!.docs[index]["active"] == true) {
-                          final refrandom = FirebaseFirestore.instance
-                              .collection('random')
-                              .doc(snapshot.data!.docs[index]["idRandom"]);
-                          await refrandom.update({
-                            "randomSubject": Random().nextInt(100000) * 9965
-                          });
-                          DocumentSnapshot getrandom = await refrandom.get();
-                          List data = [];
-                          data.add(getrandom);
-                          print("======++++++=+=+=+=+=++=+=");
-                          // print(data[0]["randomSubject"]);
+                        
+                        // if (snapshot.data!.docs[index]["active"] == true) {
+                        FirebaseFirestore.instance
+                            .collection("section")
+                            .doc(snapshot.data!.docs[index].id)
+                            .update({"active": true});
+                        final refrandom = FirebaseFirestore.instance
+                            .collection('random')
+                            .doc(snapshot.data!.docs[index]["idRandom"]);
+                        await refrandom.update(
+                            {"randomSubject": Random().nextInt(100000) * 9965});
+                        DocumentSnapshot getrandom = await refrandom.get();
+                        List data = [];
+                        data.add(getrandom);
+                      
 
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => AttendanceRecordPage(
-                                    numberrandom: data[0]["randomSubject"],
-                                    mapdata: snapshot.data!.docs[index],
-                                    idteach: snapshot.data!.docs[index].id,
-                                    namesubject: snapshot.data!.docs[index]
-                                        ["namesubject"]),
-                              ));
-                        }
+                        // ignore: use_build_context_synchronously
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AttendanceRecordPage(
+                                  numberrandom: data[0]["randomSubject"],
+                                  mapdata: snapshot.data!.docs[index],
+                                  idteach: snapshot.data!.docs[index].id,
+                                  namesubject: snapshot.data!.docs[index]
+                                      ["namesubject"]),
+                            ));
+                        // }
                       },
                       child: Card(
                         child: ListTile(
@@ -112,7 +112,7 @@ class _TechHomePageState extends State<TechHomePage> {
                                 children: [
                                   Text(
                                       snapshot.data!.docs[index]["nameteacher"],
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 15,
                                           fontWeight: FontWeight.bold)),
                                   Row(
@@ -123,7 +123,7 @@ class _TechHomePageState extends State<TechHomePage> {
                                             " - " +
                                             snapshot.data!.docs[index]
                                                 ["numbersection"][1],
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontSize: 20,
                                             fontWeight: FontWeight.bold),
                                       ),
@@ -135,7 +135,7 @@ class _TechHomePageState extends State<TechHomePage> {
                             title: Center(
                               child: Text(
                                 snapshot.data!.docs[index]["namesubject"],
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 25, fontWeight: FontWeight.bold),
                               ),
                             )),

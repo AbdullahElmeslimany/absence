@@ -19,7 +19,7 @@ class _PersionTeachDataState extends State<PersionTeachData> {
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Column(
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 30,
                 ),
                 Text(
@@ -37,7 +37,7 @@ class _PersionTeachDataState extends State<PersionTeachData> {
                       fontSize: 18,
                       fontWeight: FontWeight.bold),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 30,
                 ),
                 TextFormField(
@@ -91,7 +91,7 @@ class _PersionTeachDataState extends State<PersionTeachData> {
                     height: 45,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(25),
-                      color: Color.fromARGB(255, 126, 202, 121),
+                      color: const Color.fromARGB(255, 126, 202, 121),
                     ),
                     child: const Center(
                       child: Text(

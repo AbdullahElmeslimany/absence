@@ -170,7 +170,7 @@ class _RegesterPageState extends State<RegesterPage> {
                     width: 120,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(25),
-                      color: Color.fromARGB(255, 52, 99, 49),
+                      color: const Color.fromARGB(255, 52, 99, 49),
                     ),
                     child: const Center(
                       child: Text(

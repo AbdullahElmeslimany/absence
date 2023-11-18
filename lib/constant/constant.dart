@@ -16,17 +16,14 @@ Map? convertmap;
 List dataget = [];
 getData() async {
   pref = FirebaseFirestore.instance.collection('section');
-  // stremdata = pref.snapshots();
+
   QuerySnapshot get = await pref.get();
-  // dataget.addAll(get.docs);
-  print("===================================");
-  // print(dataget[0]);
-  print("===================================");
+  
+
   print(pref.snapshots());
-  // dataget.addAll(stremdata);
-  // convertmap = jsonDecode(dataget[0]);
+
   print("===================================");
-  // print(convertmap!["nameteacher"]);
+;
 }
 
 late QuerySnapshot prfcon;

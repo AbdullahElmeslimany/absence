@@ -12,7 +12,7 @@ class DrawerStudent extends StatelessWidget {
     return   Drawer(
                 child: ListView(
               children: [
-                DrawerHeader(
+                const DrawerHeader(
                     child: Icon(
                   Icons.person,
                   size: 80,
@@ -25,7 +25,7 @@ class DrawerStudent extends StatelessWidget {
                           builder: (context) => PersonData(data: studentdata),
                         ));
                   },
-                  child: ListTile(
+                  child: const ListTile(
                     leading: Icon(Icons.co_present_outlined, size: 26),
                     title: Text(
                       'بيانات الطالب',
@@ -40,13 +40,14 @@ class DrawerStudent extends StatelessWidget {
                         await SharedPreferences.getInstance();
                     await prefs.clear();
 
+                    // ignore: use_build_context_synchronously
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => LoginPage(),
+                          builder: (context) => const LoginPage(),
                         ));
                   },
-                  child: ListTile(
+                  child: const ListTile(
                     leading: Icon(Icons.exit_to_app_rounded, size: 26),
                     title: Text(
                       'تسجيل الخروج',

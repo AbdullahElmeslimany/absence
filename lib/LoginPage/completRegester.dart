@@ -220,6 +220,7 @@ class _CompletReqesterState extends State<CompletReqester> {
                             "rank" : "0",
                           });
                             saveshared();
+                            // ignore: use_build_context_synchronously
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
@@ -245,6 +246,6 @@ class _CompletReqesterState extends State<CompletReqester> {
         ),
       ),
     );
-    ;
+    
   }
 }
