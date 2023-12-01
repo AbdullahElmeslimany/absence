@@ -124,9 +124,9 @@ class _StudentAttendanceState extends State<StudentAttendance> {
                           });
 
                           await FirebaseFirestore.instance
-                              .collection("users")
-                              .doc("brdfK1HcFNbmtDo73ZAX")
-                              .update({"type": true});
+                              .collection("usersStudent")
+                              .doc(widget.idRandom)
+                              .update({"active": true});
                           print("sucess");
                         } else {
                           // Vibration.vibrate(pattern: [500, 0, 0, 200]);

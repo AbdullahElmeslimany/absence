@@ -135,29 +135,44 @@ class _AttendanceRecordPageState extends State<AttendanceRecordPage> {
                                   const EdgeInsets.symmetric(horizontal: 10),
                               child: Card(
                                 child: ListTile(
-                                    // leading: MaterialButton(
-                                    //   onPressed: () {},
-                                    //   child: snapshot.data!.docs[index]
-                                    //               ["type"] ==
-                                    //           true
-                                    //       ? const Text(
-                                    //           "حضر",
-                                    //           style: TextStyle(
-                                    //               fontSize: 18,
-                                    //               fontWeight: FontWeight.bold,
-                                    //               color: Colors.greenAccent),
-                                    //         )
-                                    //       : const Text(
-                                    //           "غائب",
-                                    //           style: TextStyle(
-                                    //               fontSize: 18,
-                                    //               fontWeight: FontWeight.bold,
-                                    //               color: Colors.red),
-                                    //         ),
-                                    // ),
-
+                                    leading: MaterialButton(
+                                      onPressed: () async {
+                                        if (snapshot.data!.docs[index]
+                                                ["active"] ==
+                                            true) {
+                                          await FirebaseFirestore.instance
+                                              .collection("usersStudent")
+                                              .doc(
+                                                  snapshot.data!.docs[index].id)
+                                              .update({"active": false});
+                                        } else {
+                                          await FirebaseFirestore.instance
+                                              .collection("usersStudent")
+                                              .doc(
+                                                  snapshot.data!.docs[index].id)
+                                              .update({"active": true});
+                                        }
+                                      },
+                                      child: snapshot.data!.docs[index]
+                                                  ["active"] ==
+                                              true
+                                          ? const Text(
+                                              "حضر",
+                                              style: TextStyle(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.greenAccent),
+                                            )
+                                          : const Text(
+                                              "غائب",
+                                              style: TextStyle(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.red),
+                                            ),
+                                    ),
                                     title: Text(
-                                        snapshot.data!.docs[index]["name"])),
+                                        snapshot.data!.docs[index]["fullname"])),
                               ),
                             );
                           },

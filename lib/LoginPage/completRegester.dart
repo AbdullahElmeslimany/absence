@@ -21,7 +21,7 @@ class CompletReqester extends StatefulWidget {
 
 class _CompletReqesterState extends State<CompletReqester> {
   late String firstname;
-  late String rank="0";
+  late String rank = "0";
   late String numbersection;
   late String group;
   late String specialty;
@@ -211,14 +211,15 @@ class _CompletReqesterState extends State<CompletReqester> {
                             "numbersection": numbersection,
                             "group": group,
                             "specialty": specialty,
-                            "rank" : "0",
-                          }).then((value) async{
+                            "active": false,
+                            "rank": "0",
+                          }).then((value) async {
                             await FirebaseFirestore.instance
-                              .collection("allusers")
-                              .add({
-                            "idemail": widget.uid,
-                            "rank" : "0",
-                          });
+                                .collection("allusers")
+                                .add({
+                              "idemail": widget.uid,
+                              "rank": "0",
+                            });
                             saveshared();
                             // ignore: use_build_context_synchronously
                             Navigator.pushReplacement(
@@ -246,6 +247,5 @@ class _CompletReqesterState extends State<CompletReqester> {
         ),
       ),
     );
-    
   }
 }

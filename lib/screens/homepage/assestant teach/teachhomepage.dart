@@ -29,7 +29,6 @@ class _TechHomePageState extends State<TechHomePage> {
       loading = false;
       print("========");
     });
-   
   }
 
   @override
@@ -54,96 +53,101 @@ class _TechHomePageState extends State<TechHomePage> {
                 idTeach: widget.idmail,
                 fullnameTeach: dataTeach[0]["fullname"]),
             appBar: AppBar(
-                backgroundColor: Colors.blueGrey,
+                backgroundColor: Colors.grey[200],
                 title: Center(child: Text("مرحبا م.${dataTeach[0]["name"]}"))),
-            body: StreamBuilder(
-              stream: sectionsteaher,
-              builder: (BuildContext context,
-                  AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (snapshot.hasError) {
-                  return const Text("erorr");
-                }
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
+            body: Container(
+              color: Colors.grey[300],
+              child: StreamBuilder(
+                stream: sectionsteaher,
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasError) {
+                    return const Text("erorr");
+                  }
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
 
-                return ListView.builder(
-                  itemCount: snapshot.data!.docs.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return InkWell(
-                      onTap: () async {
-                        
-                        // if (snapshot.data!.docs[index]["active"] == true) {
-                        FirebaseFirestore.instance
-                            .collection("section")
-                            .doc(snapshot.data!.docs[index].id)
-                            .update({"active": true});
-                        final refrandom = FirebaseFirestore.instance
-                            .collection('random')
-                            .doc(snapshot.data!.docs[index]["idRandom"]);
-                        await refrandom.update(
-                            {"randomSubject": Random().nextInt(100000) * 9965});
-                        DocumentSnapshot getrandom = await refrandom.get();
-                        List data = [];
-                        data.add(getrandom);
-                      
+                  return ListView.builder(
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return InkWell(
+                        onTap: () async {
+                          // if (snapshot.data!.docs[index]["active"] == true) {
+                          FirebaseFirestore.instance
+                              .collection("section")
+                              .doc(snapshot.data!.docs[index].id)
+                              .update({"active": true});
+                          final refrandom = FirebaseFirestore.instance
+                              .collection('random')
+                              .doc(snapshot.data!.docs[index]["idRandom"]);
+                          await refrandom.update({
+                            "randomSubject": Random().nextInt(100000) * 9965
+                          });
+                          DocumentSnapshot getrandom = await refrandom.get();
+                          List data = [];
+                          data.add(getrandom);
 
-                        // ignore: use_build_context_synchronously
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => AttendanceRecordPage(
-                                  numberrandom: data[0]["randomSubject"],
-                                  mapdata: snapshot.data!.docs[index],
-                                  idteach: snapshot.data!.docs[index].id,
-                                  namesubject: snapshot.data!.docs[index]
-                                      ["namesubject"]),
-                            ));
-                        // }
-                      },
-                      child: Card(
-                        child: ListTile(
-                            subtitle: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                      snapshot.data!.docs[index]["nameteacher"],
-                                      style: const TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold)),
-                                  Row(
-                                    children: [
-                                      Text(
+                          // ignore: use_build_context_synchronously
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AttendanceRecordPage(
+                                    numberrandom: data[0]["randomSubject"],
+                                    mapdata: snapshot.data!.docs[index],
+                                    idteach: snapshot.data!.docs[index].id,
+                                    namesubject: snapshot.data!.docs[index]
+                                        ["namesubject"]),
+                              ));
+                          // }
+                        },
+                        child: Card(
+                          color: const Color.fromARGB(255, 255, 255, 255),
+                          child: ListTile(
+                              subtitle: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
                                         snapshot.data!.docs[index]
-                                                ["numbersection"][0] +
-                                            " - " +
-                                            snapshot.data!.docs[index]
-                                                ["numbersection"][1],
+                                            ["nameteacher"],
                                         style: const TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold)),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          snapshot.data!.docs[index]
+                                                  ["numbersection"][0] +
+                                              " - " +
+                                              snapshot.data!.docs[index]
+                                                  ["numbersection"][1],
+                                          style: const TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            title: Center(
-                              child: Text(
-                                snapshot.data!.docs[index]["namesubject"],
-                                style: const TextStyle(
-                                    fontSize: 25, fontWeight: FontWeight.bold),
-                              ),
-                            )),
-                      ),
-                    );
-                  },
-                );
-              },
+                              title: Center(
+                                child: Text(
+                                  snapshot.data!.docs[index]["namesubject"],
+                                  style: const TextStyle(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              )),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
             ),
           );
   }
