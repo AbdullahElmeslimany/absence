@@ -11,7 +11,7 @@ class EncryptTest extends StatefulWidget {
 class _EncryptTestState extends State<EncryptTest> {
   @override
   void initState() {
-    MyEncryption.encryptAES("hello");
+    // MyEncryption.encryptAES("hello");
     
     
     super.initState();

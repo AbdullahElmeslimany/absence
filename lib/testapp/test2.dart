@@ -1,6 +1,6 @@
 import 'package:absence/constant/encryptprossing.dart';
 import 'package:flutter/material.dart';
-import 'package:encrypt/encrypt.dart' as encrypt;
+// import 'package:encrypt/encrypt.dart' as encrypt;
 
 class HomePageTest extends StatefulWidget {
   @override
@@ -53,11 +53,7 @@ class _HomePageTestState extends State<HomePageTest> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text(encryptedText == null
-                      ? ""
-                      : encryptedText is encrypt.Encrypted
-                          ? encryptedText.base64
-                          : encryptedText),
+                  child: Text(""),
                 ),
               ],
             ),
@@ -68,7 +64,7 @@ class _HomePageTestState extends State<HomePageTest> {
                   onPressed: () {
                     plainText = tec.text;
                     setState(() {
-                      encryptedText = MyEncryption.encryptAES(plainText);
+                      // encryptedText = MyEncryption.encryptAES(plainText);
                       print(plainText.runtimeType);
                       print("-=-=-=-=-=-=-=-=-===-==-=-=-=");
                     });
@@ -82,7 +78,7 @@ class _HomePageTestState extends State<HomePageTest> {
                 MaterialButton(
                   onPressed: () {
                     setState(() {
-                      encryptedText = MyEncryption.decryptAES(encryptedText);
+                      // encryptedText = MyEncryption.decryptAES(encryptedText);
                       print("===============================))");
                       print("Type: " + encryptedText.runtimeType.toString());
                     });

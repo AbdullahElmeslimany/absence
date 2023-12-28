@@ -4,6 +4,7 @@ import 'package:absence/constant/constant.dart';
 import 'package:absence/screens/homepage/assestant%20teach/teachhomepage.dart';
 
 import 'package:absence/screens/homepage/student/studenthomepage.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -13,7 +14,7 @@ import 'package:flutter/material.dart';
 bool user = false;
 bool? saved;
 String? rank;
-String? id;
+int? id;
 String? firstname;
 String? group;
 String? section;
@@ -24,15 +25,18 @@ void main() async {
   SharedPreferences prefget = await SharedPreferences.getInstance();
   saved = prefget.getBool("repeat");
   rank = prefget.getString("rank");
-  id = prefget.getString("idmail");
+  id = prefget.getInt("idmail");
   firstname = prefget.getString("firstname");
   group = prefget.getString("group");
   section = prefget.getString("section");
   specialty = prefget.getString("specialty");
-  runApp(const MyApp());
 
+
+  runApp(const MyApp());
   getData();
 }
+
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -47,6 +51,7 @@ class MyApp extends StatelessWidget {
         //   idmail: id,
         // )
         //  user == false ? StudentHomePage() : TechHomePage(),
+        //////////////////////////
         home: saved == true
             ? rank == "0"
                 ? StudentHomePage(

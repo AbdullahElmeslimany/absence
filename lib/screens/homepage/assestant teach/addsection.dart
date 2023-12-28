@@ -52,11 +52,11 @@ class _AddSectionState extends State<AddSection> {
           backgroundColor: Colors.blueGrey,
           title: const Center(child: Text("اضافة سكشن"))),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
             gradient: LinearGradient(
                 end: Alignment.topCenter,
                 begin: Alignment.bottomCenter,
-                colors: [Color.fromARGB(255, 172, 189, 247), Colors.white])),
+                colors: [ Colors.white,Colors.white])),
         child: Form(
           key: addsectionkey,
           child: SingleChildScrollView(
@@ -338,6 +338,7 @@ class _AddSectionState extends State<AddSection> {
                                                       .add({
                                                 "idteacher": widget.idTeach,
                                                 "group": groupcontroller.text,
+                                                "tabledayname": null,
                                                 "nameteather":
                                                     nameteacher != null
                                                         ? nameteacher

@@ -4,6 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 Color buttonColor = const Color.fromRGBO(255, 152, 0, 1);
+Color basecolor = const Color.fromRGBO(81, 78, 243, 1);
+Color darkcolor = Color.fromARGB(255, 59, 105, 148);
+Color talabatcolor = const Color.fromRGBO(254, 128, 132, 1);
 
 String rank = "0";
 String font1 = "Amiri";

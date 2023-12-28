@@ -1,4 +1,6 @@
 import 'package:absence/LoginPage/login.dart';
+import 'package:absence/Privacypage/privacypolicy.dart';
+import 'package:absence/Privacypage/termsandconditions.dart';
 import 'package:absence/screens/homepage/assestant%20teach/addsection.dart';
 import 'package:absence/screens/homepage/assestant%20teach/appBar/personteach.dart';
 
@@ -59,6 +61,39 @@ class DrawerPage extends StatelessWidget {
                 ));
           },
         ),
+         InkWell(
+          child: const ListTile(
+            leading: Icon(Icons.privacy_tip_outlined, size: 26),
+            title: Text(
+              'سياسة الخصوصية',
+              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+            ),
+          ),
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const PrivacyPolicy()
+                ));
+          },
+        ),
+         InkWell(
+          child: const ListTile(
+            leading: Icon(Icons.text_snippet_rounded, size: 26),
+            title: Text(
+              'الشروط والاحكام',
+              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+            ),
+          ),
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const TermsandConditions()
+                ));
+          },
+        ),
+        
         InkWell(
           onTap: () async {
             SharedPreferences prefs = await SharedPreferences.getInstance();

@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class AttendanceRecordPage extends StatefulWidget {
-  final idteach;
+  final idrandom;
   final String namesubject;
   final mapdata;
   final numberrandom;
   const AttendanceRecordPage(
       {super.key,
-      required this.idteach,
+      required this.idrandom,
       required this.namesubject,
       required this.mapdata,
       required this.numberrandom});
@@ -27,11 +27,11 @@ class _AttendanceRecordPageState extends State<AttendanceRecordPage> {
         FirebaseFirestore.instance.collection("usersStudent").snapshots();
 
     print("===================================== encrypt");
-    print(widget.mapdata["id"]);
+    print(widget.mapdata[0]["table"]);
 
     print("===================================== encrypt");
 
-    print(widget.idteach);
+    // print(widget.idteach);
     print("===================================== map");
 
     print(DateTime.now());
@@ -63,23 +63,24 @@ class _AttendanceRecordPageState extends State<AttendanceRecordPage> {
             const SizedBox(
               height: 20,
             ),
-            widget.mapdata == null
-                ? Container()
-                : Center(
-                    child: QrImageView(
-                      data: widget.numberrandom.toString(),
-                      size: MediaQuery.sizeOf(context).width - 40,
-                      version: QrVersions.auto,
-                    ),
-                  ),
+            // widget.mapdata == null
+            //     ? Container()
+            //     :
+            Center(
+              child: QrImageView(
+                data: widget.numberrandom.toString(),
+                size: MediaQuery.sizeOf(context).width - 40,
+                version: QrVersions.auto,
+              ),
+            ),
             const SizedBox(
               height: 20,
             ),
             MaterialButton(
               onPressed: () {
                 FirebaseFirestore.instance
-                    .collection("section")
-                    .doc(widget.idteach)
+                    .collection("random")
+                    .doc(widget.idrandom)
                     .update({"active": false}).then(
                         (value) => Navigator.pop(context));
               },
@@ -171,8 +172,13 @@ class _AttendanceRecordPageState extends State<AttendanceRecordPage> {
                                                   color: Colors.red),
                                             ),
                                     ),
-                                    title: Text(
-                                        snapshot.data!.docs[index]["fullname"])),
+                                    title: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Text(snapshot.data!.docs[index]
+                                            ["fullname"]),
+                                      ],
+                                    )),
                               ),
                             );
                           },

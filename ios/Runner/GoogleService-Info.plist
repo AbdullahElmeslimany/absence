@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
+<key>NSAppTransportSecurity</key>
 <dict>
 	<key>API_KEY</key>
 	<string>AIzaSyCzZafqnnesqo4Sj9dfOwqWGxd4BRxmIwA</string>
@@ -26,5 +27,8 @@
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
 	<string>1:925747815350:ios:229d5e285ed064fbd25717</string>
+	<key>NSAppTransportSecurity</key>
+	<key>NSAllowsLocalNetworking</key>
+    <true/>
 </dict>
 </plist>

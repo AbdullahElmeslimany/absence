@@ -1,20 +1,25 @@
+import 'dart:convert';
+
+import 'package:absence/constant/link.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:qr_scanner_overlay/qr_scanner_overlay.dart';
 import 'package:vibration/vibration.dart';
 
 class StudentAttendance extends StatefulWidget {
+  final idstudent;
   final subjectname;
-  final dataStudent;
+  final datasection;
   final idRandom;
   const StudentAttendance(
       {super.key,
       required this.subjectname,
-      required this.dataStudent,
-      required this.idRandom});
+      required this.datasection,
+      required this.idRandom,
+      required this.idstudent});
 
   @override
   State<StudentAttendance> createState() => _StudentAttendanceState();
@@ -33,20 +38,6 @@ class _StudentAttendanceState extends State<StudentAttendance> {
   }
 
   getdatasection() async {
-    List dataSection = [];
-    QuerySnapshot qury = await FirebaseFirestore.instance
-        .collection("section")
-        .where("group", isEqualTo: widget.dataStudent[0]["group"])
-        .where("numbersection",
-            arrayContains: widget.dataStudent[0]["numbersection"])
-        .get();
-    setState(() {
-      dataSection.addAll(qury.docs);
-    });
-    print("=========================================data");
-
-    print("===++++++++++++++++++++++++++++++++++++=====data");
-
     DocumentSnapshot refrandom = await FirebaseFirestore.instance
         .collection('random')
         .doc(widget.idRandom)
@@ -64,8 +55,12 @@ class _StudentAttendanceState extends State<StudentAttendance> {
 
   @override
   void initState() {
+    print("////////////////////////////////////");
+    print(widget.datasection["table"]);
+    print("/////////////////////////");
     getdatasection();
-
+    // print(widget.idstudent);
+    // print("===========----========================-------");
     super.initState();
   }
 
@@ -105,6 +100,50 @@ class _StudentAttendanceState extends State<StudentAttendance> {
                         });
                         if (datagetrandom[0]["randomSubject"].toString() ==
                             latecode.toString()) {
+                          ////////////////////////////////////////
+                          String table = widget.datasection["table"];
+                          String day = widget.datasection["daytablename"];
+                          String value = "1";
+                          String iduniversity = (widget.idstudent).toString();
+
+                          try {
+                            var responce = await http
+                                .post(Uri.parse(Link.updatelink), body: {
+                              "table": table,
+                              "day": day,
+                              "value": value,
+                              "iduniversity": iduniversity,
+                            });
+
+                            // check is connect or no
+                            if (responce.statusCode == 200 ||
+                                responce.statusCode == 201) {
+                              Map responsebody = jsonDecode(responce.body);
+
+                              print(responsebody);
+                              if (responsebody["status"] == "success") {
+                                print(responsebody["data"]);
+
+                                print("success");
+                                if (responsebody["data"][0]["rank"] == 1) {
+                                  print("scussess");
+                                  // Navigator.pushReplacement(
+                                  //     context,
+                                  //     MaterialPageRoute(
+                                  //         builder: (context) =>
+                                  //             HomePage()));
+                                } else {}
+                              } else if (responsebody["status"] == "failure") {
+                                // Get.defaultDialog(
+                                //     title: "ُWarning",
+                                //     middleText: "Password Or Email");
+                              }
+                            }
+                          } catch (e) {
+                            print(e);
+                          }
+
+                          //////////////////////////////////////////////
                           Vibration.vibrate(duration: 350, amplitude: 128);
                           AwesomeDialog(
                             context: context,
@@ -122,12 +161,6 @@ class _StudentAttendanceState extends State<StudentAttendance> {
                           setState(() {
                             active = true;
                           });
-
-                          await FirebaseFirestore.instance
-                              .collection("usersStudent")
-                              .doc(widget.idRandom)
-                              .update({"active": true});
-                          print("sucess");
                         } else {
                           // Vibration.vibrate(pattern: [500, 0, 0, 200]);
                           AwesomeDialog(
