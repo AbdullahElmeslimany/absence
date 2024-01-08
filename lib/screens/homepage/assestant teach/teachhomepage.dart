@@ -9,14 +9,13 @@ import 'package:absence/constant/constant.dart';
 import 'package:absence/screens/homepage/assestant%20teach/Attendance%20Record%20Page/AttendanceRecordPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swipe_refresh/swipe_refresh.dart';
 
 class TechHomePage extends StatefulWidget {
   final idmail;
-
   const TechHomePage({super.key, required this.idmail});
-
   @override
   State<TechHomePage> createState() => _TechHomePageState();
 }
@@ -29,8 +28,7 @@ class _TechHomePageState extends State<TechHomePage> {
 // late int id;
   getdatafromApi() async {
     try {
-      prefs = await SharedPreferences.getInstance();
-      // int id = prefs.getInt("idmail")!;
+
       var responce = await http.post(Uri.parse(Link.getdatalink),
           body: {"table": table, "nattional_id": (widget.idmail).toString()});
 
@@ -54,11 +52,34 @@ class _TechHomePageState extends State<TechHomePage> {
     }
   }
 
-  late SharedPreferences prefs;
+  RefreshController refreshControllerteacherhome =
+      RefreshController(initialRefresh: true);
+
+  void onRefresh() async {
+    await Future.delayed(Duration(milliseconds: 1000));
+    refreshControllerteacherhome.refreshCompleted();
+  }
+
+  void onLoading() async {
+    await Future.delayed(Duration(milliseconds: 1000));
+    if (mounted) setState(() {});
+    refreshControllerteacherhome.loadComplete();
+  }
+
+  getdataformmemory() async {
+    SharedPreferences prefsAdd = await SharedPreferences.getInstance();
+    print("id mail===============================");
+    print("data...................................");
+    print("id =  ${prefsAdd.getInt("idmail")}");
+    print("rank =  ${prefsAdd.getInt("rank")}");
+    print("repeat =  ${prefsAdd.getBool("repeat")}");
+    print("data..............................");
+  }
 
   @override
   void initState() {
     getdatafromApi();
+    getdataformmemory();
     print(dataTeach);
     super.initState();
   }
@@ -126,93 +147,102 @@ class _TechHomePageState extends State<TechHomePage> {
                                 child: CircularProgressIndicator());
                           }
 
-                          return ListView.builder(
-                            itemCount: snapshot.data!.docs.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return InkWell(
-                                onTap: () async {
-                                  print(snapshot.data!.docs[index].id);
-                                  // if (snapshot.data!.docs[index]["active"] == true) {
-                                  FirebaseFirestore.instance
-                                      .collection("random")
-                                      .doc(snapshot.data!.docs[index].id)
-                                      .update({"active": true});
-                                  final refrandom = FirebaseFirestore.instance
-                                      .collection('random')
-                                      .doc(snapshot.data!.docs[index].id);
-                                  await refrandom.update({
-                                    "randomSubject":
-                                        Random().nextInt(100000) * 9965999
-                                  });
-                                  DocumentSnapshot getrandom =
-                                      await refrandom.get();
-                                  List datasubject = [];
-                                  datasubject.add(getrandom);
-                                  // ignore: use_build_context_synchronously
-                                  print(datasubject[0]["randomSubject"]);
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            AttendanceRecordPage(
-                                                numberrandom: datasubject[0]
-                                                    ["randomSubject"],
-                                                mapdata: datasubject,
-                                                idrandom: snapshot
-                                                    .data!.docs[index].id,
-                                                namesubject:
-                                                    snapshot.data!.docs[index]
-                                                        ["nameSubject"]),
-                                      ));
-                                },
-                                child: Card(
-                                  color:
-                                      const Color.fromARGB(255, 255, 255, 255),
-                                  child: ListTile(
-                                      subtitle: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 10),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                                snapshot.data!.docs[index]
-                                                    ["nameteather"],
-                                                style: const TextStyle(
-                                                    fontSize: 15,
-                                                    fontWeight:
-                                                        FontWeight.bold)),
-                                            Row(
-                                              children: [
-                                                Text(
-                                                  snapshot.data!.docs[index]
-                                                          ["numbersection"][0] +
-                                                      " - " +
+                          return SmartRefresher(
+                            controller: refreshControllerteacherhome,
+                            onRefresh: onRefresh,
+                            onLoading: onLoading,
+                            enablePullDown: true,
+                            header: WaterDropHeader(waterDropColor: Colors.red),
+                            child: ListView.builder(
+                              itemCount: snapshot.data!.docs.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return InkWell(
+                                  onTap: () async {
+                                    print(snapshot.data!.docs[index].id);
+                                    // if (snapshot.data!.docs[index]["active"] == true) {
+                                    FirebaseFirestore.instance
+                                        .collection("random")
+                                        .doc(snapshot.data!.docs[index].id)
+                                        .update({"active": true});
+                                    final refrandom = FirebaseFirestore.instance
+                                        .collection('random')
+                                        .doc(snapshot.data!.docs[index].id);
+                                    await refrandom.update({
+                                      "randomSubject":
+                                          Random().nextInt(100000) * 9965999
+                                    });
+                                    DocumentSnapshot getrandom =
+                                        await refrandom.get();
+                                    List datasubject = [];
+                                    datasubject.add(getrandom);
+                                    // ignore: use_build_context_synchronously
+                                    print(datasubject[0]["randomSubject"]);
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              AttendanceRecordPage(
+                                                  numberrandom: datasubject[0]
+                                                      ["randomSubject"],
+                                                  mapdata: datasubject,
+                                                  idrandom: snapshot
+                                                      .data!.docs[index].id,
+                                                  namesubject:
                                                       snapshot.data!.docs[index]
-                                                          ["numbersection"][1],
+                                                          ["nameSubject"]),
+                                        ));
+                                  },
+                                  child: Card(
+                                    color: const Color.fromARGB(
+                                        255, 255, 255, 255),
+                                    child: ListTile(
+                                        subtitle: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                  snapshot.data!.docs[index]
+                                                      ["nameteather"],
                                                   style: const TextStyle(
-                                                      fontSize: 20,
+                                                      fontSize: 15,
                                                       fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
+                                                          FontWeight.bold)),
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    snapshot.data!.docs[index][
+                                                                "numbersection"]
+                                                            [0] +
+                                                        " - " +
+                                                        snapshot.data!
+                                                                .docs[index][
+                                                            "numbersection"][1],
+                                                    style: const TextStyle(
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                      title: Center(
-                                        child: Text(
-                                          snapshot.data!.docs[index]
-                                              ["nameSubject"],
-                                          style: const TextStyle(
-                                              fontSize: 25,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      )),
-                                ),
-                              );
-                            },
+                                        title: Center(
+                                          child: Text(
+                                            snapshot.data!.docs[index]
+                                                ["nameSubject"],
+                                            style: const TextStyle(
+                                                fontSize: 25,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        )),
+                                  ),
+                                );
+                              },
+                            ),
                           );
                         },
                       ),
