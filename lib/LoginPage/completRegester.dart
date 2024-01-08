@@ -226,11 +226,8 @@ class _CompletReqesterState extends State<CompletReqester> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => StudentHomePage(
-                                      firstname: firstname,
-                                      specialty: specialty,
-                                      group: group,
-                                      idmail: widget.uid,
-                                      section: numbersection),
+                                    idmail: widget.uid,
+                                  ),
                                 ));
                           });
                         },

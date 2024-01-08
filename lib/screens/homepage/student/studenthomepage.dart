@@ -1,29 +1,26 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:absence/constant/constant.dart';
 import 'package:absence/constant/link.dart';
 import 'package:absence/constant/subject.dart';
-import 'package:absence/screens/homepage/student/StudentAttendanceCamira.dart';
+import 'package:absence/screens/homepage/student/studentattendanceCamira.dart';
 import 'package:absence/screens/homepage/student/drawerStudent.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:http/http.dart' as http;
+
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StudentHomePage extends StatefulWidget {
-  final firstname;
   final idmail;
-  final group;
-  final section;
-  final specialty;
-  const StudentHomePage(
-      {super.key,
-      this.firstname,
-      required this.idmail,
-      this.group,
-      this.section,
-      this.specialty});
+  const StudentHomePage({
+    super.key,
+    required this.idmail,
+  });
 
   @override
   State<StudentHomePage> createState() => _StudentHomePageState();
@@ -134,6 +131,33 @@ class _StudentHomePageState extends State<StudentHomePage> {
     });
   }
 
+/////////////////////////////////////////////////////////
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
+  RefreshController refreshController = RefreshController(initialRefresh: true);
+
+  void onRefresh() async {
+    await Future.delayed(Duration(milliseconds: 1000));
+    refreshController.refreshCompleted();
+  }
+
+  void onLoading() async {
+    await Future.delayed(Duration(milliseconds: 1000));
+    if (mounted) setState(() {});
+    refreshController.loadComplete();
+  }
+
+  ////////////////////////////////////////////////////
+  getdataformmemory() async {
+    SharedPreferences prefsAdd = await SharedPreferences.getInstance();
+    print("id mail===============================");
+    print("data...................................");
+    print("id =  ${prefsAdd.getInt("idmail")}");
+    print("rank =  ${prefsAdd.getInt("rank")}");
+    print("repeat =  ${prefsAdd.getBool("repeat")}");
+    print("data..............................");
+  }
+
   @override
   void initState() {
     getdatafromApi();
@@ -150,8 +174,11 @@ class _StudentHomePageState extends State<StudentHomePage> {
     //   print(idusershared);
     //   print("id ++-+-+----+-+----+-+-+");
 
+    getdataformmemory();
     super.initState();
   }
+
+  final GlobalKey streamKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -162,6 +189,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
             ),
           )
         : Scaffold(
+            key: scaffoldKey,
             appBar: AppBar(),
             endDrawer: DrawerStudent(studentdata: "studentdata"),
             body: SingleChildScrollView(
@@ -175,12 +203,12 @@ class _StudentHomePageState extends State<StudentHomePage> {
                       cardinfo(context),
                       const Gap(20),
                       /////////////////////////////////////////////////////
-
                       Container(
                         color: Colors.grey[300],
                         height: 500,
                         child: Center(
                           child: StreamBuilder(
+                            key: streamKey,
                             stream: sectionsteaheractive,
                             builder: (BuildContext context,
                                 AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -195,153 +223,162 @@ class _StudentHomePageState extends State<StudentHomePage> {
                                     child: CircularProgressIndicator());
                               }
 
-                              return ListView.builder(
-                                itemCount: snapshot.data!.docs.length,
-                                itemBuilder: (context, index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.only(top: 5.0),
-                                    child: InkWell(
-                                        onTap: () {
-                                          print(snapshot.data!.docs[index]
-                                              ["table"]);
-                                          print(
-                                              datastudent[0]["id_university"]);
-                                          print(snapshot.data!.docs[index]
-                                              ["daytablename"]);
-                                          checkdata(
-                                              table: snapshot.data!.docs[index]
-                                                  ["table"],
-                                              iduniversity: (datastudent[0]
-                                                      ["id_university"])
-                                                  .toString(),
-                                              day: snapshot.data!.docs[index]
-                                                  ["daytablename"]);
-                                          print(snapshot.data!.docs[index].id);
-                                          if (snapshot.data!.docs[index]
-                                                  ["active"] ==
-                                              true) {
-                                            // print(snapshot.data!.docs[index]["idRandom"]);
-                                            // Navigator.push(
-                                            //     context,
-                                            //     MaterialPageRoute(
-                                            //         builder: (context) =>
-                                            //             StudentAttendance(
-                                            //                 idstudent:
-                                            //                     datastudent[0]
-                                            //                         [
-                                            //                         "id_university"],
-                                            //                 datasection:
-                                            //                     snapshot.data!
-                                            //                             .docs[
-                                            //                         index],
-                                            //                 subjectname: snapshot
-                                            //                         .data!
-                                            //                         .docs[index]
-                                            //                     ["nameSubject"],
-                                            //                 idRandom: snapshot
-                                            //                     .data!
-                                            //                     .docs[index]
-                                            //                     .id)));
-                                          } else {
-                                            print("غير متاج");
-                                          }
-                                        },
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.stretch,
-                                          children: [
-                                            Container(
-                                                padding:
-                                                    const EdgeInsetsDirectional
-                                                        .symmetric(
-                                                        horizontal: 20),
-                                                alignment:
-                                                    Alignment.centerRight,
-                                                height: 70,
-                                                width:
-                                                    MediaQuery.sizeOf(context)
-                                                            .width -
-                                                        20,
-                                                decoration: const BoxDecoration(
-                                                    color: Colors.white),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    snapshot.data!.docs[index]
-                                                                ["active"] ==
-                                                            true
-                                                        ? const Column(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .end,
-                                                            children: [
-                                                              Icon(
-                                                                Icons
-                                                                    .check_circle_outlined,
-                                                                color: Color
-                                                                    .fromARGB(
-                                                                        255,
-                                                                        2,
-                                                                        136,
-                                                                        53),
-                                                                size: 30,
-                                                                weight: 50,
-                                                              ),
-                                                              Text(
-                                                                "متاح",
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        15,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold),
-                                                              )
-                                                            ],
-                                                          )
-                                                        : const Column(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .end,
-                                                            children: [
-                                                              Icon(
-                                                                Icons
-                                                                    .dnd_forwardslash_outlined,
-                                                                color:
-                                                                    Colors.grey,
-                                                                size: 30,
-                                                              ),
-                                                              Text(
-                                                                "غير متاح",
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        15,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold),
-                                                              )
-                                                            ],
-                                                          ),
-                                                    Text(
+                              return SmartRefresher(
+                                controller: refreshController,
+                                onRefresh: onRefresh,
+                                onLoading: onLoading,
+                                enablePullDown: true,
+                                header:
+                                    WaterDropHeader(waterDropColor: Colors.red),
+                                child: ListView.builder(
+                                  itemCount: snapshot.data!.docs.length,
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding: const EdgeInsets.only(top: 5.0),
+                                      child: InkWell(
+                                          onTap: () {
+                                            print(snapshot.data!.docs[index]
+                                                ["table"]);
+                                            print(datastudent[0]
+                                                ["id_university"]);
+                                            print(snapshot.data!.docs[index]
+                                                ["daytablename"]);
+                                            checkdata(
+                                                table: snapshot
+                                                    .data!.docs[index]["table"],
+                                                iduniversity: (datastudent[0]
+                                                        ["id_university"])
+                                                    .toString(),
+                                                day: snapshot.data!.docs[index]
+                                                    ["daytablename"]);
+                                            print(
+                                                snapshot.data!.docs[index].id);
+                                            if (snapshot.data!.docs[index]
+                                                    ["active"] ==
+                                                true) {
+                                              // print(snapshot.data!.docs[index]["idRandom"]);
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) => StudentAttendance(
+                                                          idstudent: datastudent[
+                                                                  0]
+                                                              ["id_university"],
+                                                          datasection: snapshot
+                                                              .data!
+                                                              .docs[index],
+                                                          subjectname: snapshot
+                                                                  .data!
+                                                                  .docs[index]
+                                                              ["nameSubject"],
+                                                          idRandom: snapshot
+                                                              .data!
+                                                              .docs[index]
+                                                              .id)));
+                                            } else {
+                                              print("غير متاج");
+                                            }
+                                          },
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.stretch,
+                                            children: [
+                                              Container(
+                                                  padding:
+                                                      const EdgeInsetsDirectional
+                                                          .symmetric(
+                                                          horizontal: 20),
+                                                  alignment:
+                                                      Alignment.centerRight,
+                                                  height: 70,
+                                                  width:
+                                                      MediaQuery.sizeOf(context)
+                                                              .width -
+                                                          20,
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                          color: Colors.white),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
                                                       snapshot.data!.docs[index]
-                                                          ["nameSubject"],
-                                                      style: const TextStyle(
-                                                          fontSize: 20,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                  ],
-                                                )),
-                                            const SizedBox(
-                                              height: 7,
-                                            )
-                                          ],
-                                        )),
-                                  );
-                                },
+                                                                  ["active"] ==
+                                                              true
+                                                          ? const Column(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .end,
+                                                              children: [
+                                                                Icon(
+                                                                  Icons
+                                                                      .check_circle_outlined,
+                                                                  color: Color
+                                                                      .fromARGB(
+                                                                          255,
+                                                                          2,
+                                                                          136,
+                                                                          53),
+                                                                  size: 30,
+                                                                  weight: 50,
+                                                                ),
+                                                                Text(
+                                                                  "متاح",
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          15,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold),
+                                                                )
+                                                              ],
+                                                            )
+                                                          : const Column(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .end,
+                                                              children: [
+                                                                Icon(
+                                                                  Icons
+                                                                      .dnd_forwardslash_outlined,
+                                                                  color: Colors
+                                                                      .grey,
+                                                                  size: 30,
+                                                                ),
+                                                                Text(
+                                                                  "غير متاح",
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          15,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold),
+                                                                )
+                                                              ],
+                                                            ),
+                                                      Text(
+                                                        snapshot.data!
+                                                                .docs[index]
+                                                            ["nameSubject"],
+                                                        style: const TextStyle(
+                                                            fontSize: 20,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                    ],
+                                                  )),
+                                              const SizedBox(
+                                                height: 7,
+                                              )
+                                            ],
+                                          )),
+                                    );
+                                  },
+                                ),
                               );
                             },
                           ),

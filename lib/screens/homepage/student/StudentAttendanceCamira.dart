@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:geolocator/geolocator.dart';
 import 'package:absence/constant/link.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -53,12 +53,20 @@ class _StudentAttendanceState extends State<StudentAttendance> {
     print("===++++++++++++++++++++++++++++++++++++=====data");
   }
 
+  Position? position;
+  positionGet() async {
+    position = await Geolocator.getLastKnownPosition();
+    print(position!.latitude);
+    print(position!.longitude);
+  }
+
   @override
   void initState() {
     print("////////////////////////////////////");
     print(widget.datasection["table"]);
     print("/////////////////////////");
     getdatasection();
+    positionGet();
     // print(widget.idstudent);
     // print("===========----========================-------");
     super.initState();
@@ -98,83 +106,97 @@ class _StudentAttendanceState extends State<StudentAttendance> {
 
                           isScanCompleted = true;
                         });
-                        if (datagetrandom[0]["randomSubject"].toString() ==
-                            latecode.toString()) {
-                          ////////////////////////////////////////
-                          String table = widget.datasection["table"];
-                          String day = widget.datasection["daytablename"];
-                          String value = "1";
-                          String iduniversity = (widget.idstudent).toString();
 
-                          try {
-                            var responce = await http
-                                .post(Uri.parse(Link.updatelink), body: {
-                              "table": table,
-                              "day": day,
-                              "value": value,
-                              "iduniversity": iduniversity,
-                            });
-
-                            // check is connect or no
-                            if (responce.statusCode == 200 ||
-                                responce.statusCode == 201) {
-                              Map responsebody = jsonDecode(responce.body);
-
-                              print(responsebody);
-                              if (responsebody["status"] == "success") {
-                                print(responsebody["data"]);
-
-                                print("success");
-                                if (responsebody["data"][0]["rank"] == 1) {
-                                  print("scussess");
-                                  // Navigator.pushReplacement(
-                                  //     context,
-                                  //     MaterialPageRoute(
-                                  //         builder: (context) =>
-                                  //             HomePage()));
-                                } else {}
-                              } else if (responsebody["status"] == "failure") {
-                                // Get.defaultDialog(
-                                //     title: "ُWarning",
-                                //     middleText: "Password Or Email");
-                              }
-                            }
-                          } catch (e) {
-                            print(e);
-                          }
-
-                          //////////////////////////////////////////////
-                          Vibration.vibrate(duration: 350, amplitude: 128);
-                          AwesomeDialog(
-                            context: context,
-                            dialogType: DialogType.success,
-                            animType: AnimType.bottomSlide,
-                            title: 'تم تسجيل حضورك بنجاح',
-                            desc: '${widget.subjectname}',
-                            descTextStyle: const TextStyle(
-                                fontSize: 24, fontWeight: FontWeight.bold),
-                            btnOkOnPress: () {
-                              Navigator.pop(context);
-                            },
-                          ).show();
-
-                          setState(() {
-                            active = true;
-                          });
+                        if (position!.latitude > 31.015478979887387 &&
+                            position!.longitude > 31.377746093558976 &&
+                            position!.latitude > 31.015295674066557 &&
+                            position!.longitude > 31.37804683624477 &&
+                            position!.latitude < 31.016691007875927 &&
+                            position!.longitude < 31.37902791462027 &&
+                            position!.latitude < 31.01641791122879 &&
+                            position!.longitude < 31.37937827817284) {
+                          //31.016013481797803,31.37868090382897
+                          print("انت بالداخل");
                         } else {
-                          // Vibration.vibrate(pattern: [500, 0, 0, 200]);
-                          AwesomeDialog(
-                            context: context,
-                            dialogType: DialogType.error,
-                            animType: AnimType.bottomSlide,
-                            title: 'لم  يتم تسجيل حضورك اعد المحاولة',
-                            // desc: 'Dialog description here.............',
-                            btnCancelText: "الرجوع",
-                            btnCancelOnPress: () {
-                              Navigator.pop(context);
-                            },
-                          ).show();
+                          print("انت بالخارج");
                         }
+                        // if (datagetrandom[0]["randomSubject"].toString() ==
+                        //     latecode.toString()) {
+                        //   ////////////////////////////////////////
+                        //   String table = widget.datasection["table"];
+                        //   String day = widget.datasection["daytablename"];
+                        //   String value = "1";
+                        //   String iduniversity = (widget.idstudent).toString();
+
+                        //   try {
+                        //     var responce = await http
+                        //         .post(Uri.parse(Link.updatelink), body: {
+                        //       "table": table,
+                        //       "day": day,
+                        //       "value": value,
+                        //       "iduniversity": iduniversity,
+                        //     });
+
+                        //     // check is connect or no
+                        //     if (responce.statusCode == 200 ||
+                        //         responce.statusCode == 201) {
+                        //       Map responsebody = jsonDecode(responce.body);
+
+                        //       print(responsebody);
+                        //       if (responsebody["status"] == "success") {
+                        //         print(responsebody["data"]);
+
+                        //         print("success");
+                        //         if (responsebody["data"][0]["rank"] == 1) {
+                        //           print("scussess");
+                        //           // Navigator.pushReplacement(
+                        //           //     context,
+                        //           //     MaterialPageRoute(
+                        //           //         builder: (context) =>
+                        //           //             HomePage()));
+                        //         } else {}
+                        //       } else if (responsebody["status"] == "failure") {
+                        //         // Get.defaultDialog(
+                        //         //     title: "ُWarning",
+                        //         //     middleText: "Password Or Email");
+                        //       }
+                        //     }
+                        //   } catch (e) {
+                        //     print(e);
+                        //   }
+
+                        //   //////////////////////////////////////////////
+                        //   Vibration.vibrate(duration: 350, amplitude: 128);
+                        //   AwesomeDialog(
+                        //     context: context,
+                        //     dialogType: DialogType.success,
+                        //     animType: AnimType.bottomSlide,
+                        //     title: 'تم تسجيل حضورك بنجاح',
+                        //     desc: '${widget.subjectname}',
+                        //     descTextStyle: const TextStyle(
+                        //         fontSize: 24, fontWeight: FontWeight.bold),
+                        //     btnOkOnPress: () {
+                        //       Navigator.pop(context);
+                        //     },
+                        //   ).show();
+
+                        //   setState(() {
+                        //     active = true;
+                        //   });
+                        // } else {
+                        //   // Vibration.vibrate(pattern: [500, 0, 0, 200]);
+                        //   AwesomeDialog(
+                        //     context: context,
+                        //     dialogType: DialogType.error,
+                        //     animType: AnimType.bottomSlide,
+                        //     title: 'لم  يتم تسجيل حضورك اعد المحاولة',
+                        //     // desc: 'Dialog description here.............',
+                        //     btnCancelText: "الرجوع",
+                        //     btnCancelOnPress: () {
+                        //       Navigator.pop(context);
+                        //     },
+                        //   ).show();
+                        // }
                       }
                     },
                   ),

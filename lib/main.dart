@@ -1,9 +1,15 @@
 import 'package:absence/LoginPage/login.dart';
 
 import 'package:absence/constant/constant.dart';
+import 'package:absence/finger_auth/finger_auth_logic.dart';
+import 'package:absence/logic_main_page.dart';
 import 'package:absence/screens/homepage/assestant%20teach/teachhomepage.dart';
 
 import 'package:absence/screens/homepage/student/studenthomepage.dart';
+import 'package:absence/test/reftest.dart';
+import 'package:absence/test/test_finger_auth.dart';
+import 'package:flutter/services.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -11,32 +17,14 @@ import 'package:firebase_core/firebase_core.dart';
 
 import 'package:flutter/material.dart';
 
-bool user = false;
-bool? saved;
-String? rank;
-int? id;
-String? firstname;
-String? group;
-String? section;
-String? specialty;
+GetDataFromMemoey _dataFromMemoey = GetDataFromMemoey();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  SharedPreferences prefget = await SharedPreferences.getInstance();
-  saved = prefget.getBool("repeat");
-  rank = prefget.getString("rank");
-  id = prefget.getInt("idmail");
-  firstname = prefget.getString("firstname");
-  group = prefget.getString("group");
-  section = prefget.getString("section");
-  specialty = prefget.getString("specialty");
-
-
+  _dataFromMemoey.getdatahelp();
   runApp(const MyApp());
-  getData();
+  fingerAuth();
 }
-
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -45,23 +33,20 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        // home: StudentHomePage(),
+        // home: TestFinger());
         // home: StudentAttendance(subjectname: "null",)
         // home: TechHomePage(
         //   idmail: id,
         // )
         //  user == false ? StudentHomePage() : TechHomePage(),
         //////////////////////////
-        home: saved == true
-            ? rank == "0"
+
+        home: _dataFromMemoey.saved == true
+            ? _dataFromMemoey.rank == 0
                 ? StudentHomePage(
-                    idmail: id,
-                    firstname: firstname,
-                    group: group,
-                    section: section,
-                    specialty: specialty,
+                    idmail: _dataFromMemoey.id,
                   )
-                : TechHomePage(idmail: id)
-            : const LoginPage());
+                : TechHomePage(idmail: _dataFromMemoey.id)
+            : LoginPage());
   }
 }

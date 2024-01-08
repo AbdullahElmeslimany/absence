@@ -8,7 +8,9 @@ import 'package:absence/screens/homepage/assestant%20teach/teachhomepage.dart';
 import 'package:absence/screens/homepage/student/studenthomepage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:absence/test/testpage.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -43,10 +45,70 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  positionGet() async {
+    Position? position = await Geolocator.getLastKnownPosition();
+    // double late = 31.01534035567858;
+    // double lang = 31.377829242038437;
+    // print(late - 31.015478979887387);
+    // print(late - 31.015295674066557);
+    // print(late - 31.016691007875927);
+    // print(late - 31.01641791122879);
+    // print(lang - 31.377746093558976);
+    // print(lang - 31.37804683624477);
+    // print(lang - 31.37902791462027);
+    // print(lang - 31.37937827817284);
+
+    // if (late > 31.015478979887387 &&
+    //     lang > 31.377746093558976 &&
+    //     late > 31.015295674066557 &&
+    //     lang > 31.37804683624477 &&
+    //     late < 31.016691007875927 &&
+    //     lang < 31.37902791462027 &&
+    //     late < 31.01641791122879 &&
+    //     lang < 31.37937827817284) {
+    //   print("انت بالداخل");
+    // } else {
+    //   print("انت بالخارج");
+    // }
+    //31.016013481797803,31.37868090382897
+
+    // else {
+    //   print("انت بالخارج");
+    // }
+    //////////////////////////
+    if (position!.latitude > 31.015478979887387 &&
+        position!.longitude > 31.377746093558976 &&
+        position!.latitude > 31.015295674066557 &&
+        position!.longitude > 31.37804683624477 &&
+        position!.latitude < 31.016691007875927 &&
+        position!.longitude < 31.37902791462027 &&
+        position!.latitude < 31.01641791122879 &&
+        position!.longitude < 31.37937827817284) {
+      //31.016013481797803,31.37868090382897
+      print("انت بالداخل");
+    } else {
+      print("انت بالخارج");
+    }
+    print(position!.latitude);
+    print(position!.longitude);
+  }
+
+  getdatafrommemory() async {
+    SharedPreferences prefsAdd = await SharedPreferences.getInstance();
+    print("data...................................");
+    print("id =  ${prefsAdd.getInt("idmail")}");
+    print("rank =  ${prefsAdd.getInt("rank")}");
+    print("repeat =  ${prefsAdd.getBool("repeat")}");
+    print("data..............................");
+  }
+
   @override
   void initState() {
     savedSharedData();
     permision();
+    determinePositiona();
+    getdatafrommemory();
+    // positionGet();
     super.initState();
   }
 
@@ -89,10 +151,13 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         Text(
                           "مرحبا بك",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 40,
-                              fontFamily: font2),
+                          style: GoogleFonts.alexandria(
+                              fontSize: 30, color: darkcolor),
+                          // style: TextStyle(
+                          //     fontWeight: FontWeight.bold,
+                          //     fontSize: 40,
+                          // fontFamily: font2
+                          //     ),
                         ),
                         Container(
                           height: 200,
@@ -194,12 +259,19 @@ class _LoginPageState extends State<LoginPage> {
                                       loadButton = false;
                                     });
                                     print("success");
+                                    SharedPreferences prefsAdd =
+                                        await SharedPreferences.getInstance();
+                                    prefsAdd.setInt(
+                                        "idmail", data[0]["nattional_id"]);
+                                    prefsAdd.setInt("rank", data[0]["rank"]);
+                                    prefsAdd.setBool("repeat", true);
+                                    // prefs.setBool("repeat", true);
+                                    print(prefs.getInt("idmail"));
+                                    print(prefs.getInt("rank"));
+                                    print(prefs.getBool("repeat"));
                                     if (responsebody["data"][0]["rank"] == 1) {
                                       print("scussess");
-                                      prefs.setInt(
-                                          "idmail", data[0]["nattional_id"]);
-                                      // prefs.setBool("repeat", true);
-                                      print(prefs.getInt("idmail"));
+
                                       print("pppppppppppppppppppppppppppppppp");
                                       int? id = prefs.getInt("idmail");
                                       print(id);
