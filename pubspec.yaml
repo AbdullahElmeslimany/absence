@@ -53,6 +53,7 @@ dependencies:
   gap: ^3.0.1
   swipe_refresh: ^1.0.2
   permission_handler: ^11.1.0
+  geolocator: ^10.1.0
 
 
 
