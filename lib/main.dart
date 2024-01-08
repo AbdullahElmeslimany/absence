@@ -3,12 +3,13 @@ import 'package:absence/LoginPage/login.dart';
 import 'package:absence/constant/constant.dart';
 import 'package:absence/finger_auth/finger_auth_logic.dart';
 import 'package:absence/logic_main_page.dart';
-import 'package:absence/screens/homepage/assestant%20teach/teachhomepage.dart';
+import 'package:absence/screens/homepage/assestant%20teach/home%20page%20teacher/teachhomepage.dart';
 
 import 'package:absence/screens/homepage/student/studenthomepage.dart';
 import 'package:absence/test/reftest.dart';
 import 'package:absence/test/test_finger_auth.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
         debugShowCheckedModeBanner: false,
         // home: TestFinger());
         // home: StudentAttendance(subjectname: "null",)

@@ -1,8 +1,8 @@
 import 'package:absence/LoginPage/login.dart';
 import 'package:absence/Privacypage/privacypolicy.dart';
 import 'package:absence/Privacypage/termsandconditions.dart';
-import 'package:absence/screens/homepage/assestant%20teach/addsection.dart';
-import 'package:absence/screens/homepage/assestant%20teach/appBar/personteach.dart';
+import 'package:absence/screens/homepage/assestant%20teach/add%20section%20page/addsection.dart';
+import 'package:absence/screens/homepage/assestant%20teach/home%20page%20teacher/appBar/personteach.dart';
 
 
 import 'package:flutter/material.dart';

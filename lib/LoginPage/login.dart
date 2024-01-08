@@ -4,7 +4,7 @@ import 'package:absence/LoginPage/regester.dart';
 import 'package:absence/constant/Shared.dart';
 import 'package:absence/constant/constant.dart';
 import 'package:absence/constant/link.dart';
-import 'package:absence/screens/homepage/assestant%20teach/teachhomepage.dart';
+import 'package:absence/screens/homepage/assestant%20teach/home%20page%20teacher/teachhomepage.dart';
 import 'package:absence/screens/homepage/student/studenthomepage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';

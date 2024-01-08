@@ -1,6 +1,6 @@
 import 'package:absence/constant/constant.dart';
-import 'package:absence/screens/homepage/assestant%20teach/table/tableday.dart';
-import 'package:absence/screens/homepage/assestant%20teach/table/tablesubject.dart';
+import 'package:absence/screens/homepage/assestant%20teach/home%20page%20teacher/table/tableday.dart';
+import 'package:absence/screens/homepage/assestant%20teach/home%20page%20teacher/table/tablesubject.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
