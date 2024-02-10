@@ -5,4 +5,6 @@ sealed class RandomUpdateState {}
 
 final class RandomUpdateInitial extends RandomUpdateState {}
 
-final class RandomUpdateChangeState extends RandomUpdateState {}
+final class StartMethodState extends RandomUpdateState {}
+
+final class LoopMethodState extends RandomUpdateState {}

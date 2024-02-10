@@ -53,14 +53,13 @@ class _AttendanceRecordPageState extends State<AttendanceRecordPage> {
     late int randomCount;
     return BlocConsumer<RandomUpdateCubit, RandomUpdateState>(
       listener: (context, state) {
-        if (state is RandomUpdateInitial) {
-          print(state);
+        print(state);
+        if (state is StartMethodState) {
+          randomCount = BlocProvider.of<RandomUpdateCubit>(context).randomCount;
+        }
+        if (state is LoopMethodState) {
           BlocProvider.of<RandomUpdateCubit>(context)
               .rondomUpDate(id: widget.idrandom);
-        } else if (state is RandomUpdateChangeState) {
-          print(state);
-          randomCount = BlocProvider.of<RandomUpdateCubit>(context).randomCount;
-          print("state $randomCount");
         }
       },
       builder: (context, state) {
@@ -151,10 +150,4 @@ class _AttendanceRecordPageState extends State<AttendanceRecordPage> {
       },
     );
   }
-
-// ate Stream<QuerySnapshot> userstudent;
-  // streamData() {
-  //   userstudent =
-  //       FirebaseFirestore.instance.collection("usersStudent").snapshots();
-  // }
 }

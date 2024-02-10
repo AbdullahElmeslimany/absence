@@ -42,15 +42,9 @@ class _StudentAttendanceState extends State<StudentAttendance> {
         .collection('random')
         .doc(widget.idRandom)
         .get();
-
     setState(() {
       datagetrandom.add(refrandom);
     });
-    print("=========================================data");
-
-    print(widget.idRandom);
-    print(datagetrandom[0]["randomSubject"]);
-    print("===++++++++++++++++++++++++++++++++++++=====data");
   }
 
   Position? position;
@@ -62,13 +56,8 @@ class _StudentAttendanceState extends State<StudentAttendance> {
 
   @override
   void initState() {
-    print("////////////////////////////////////");
-    print(widget.datasection["table"]);
-    print("/////////////////////////");
     getdatasection();
     positionGet();
-    // print(widget.idstudent);
-    // print("===========----========================-------");
     super.initState();
   }
 
@@ -113,15 +102,16 @@ class _StudentAttendanceState extends State<StudentAttendance> {
                             position!.longitude < 31.37937827817284) {
                           //31.016013481797803,31.37868090382897
                           print("انت بالداخل");
+                          success();
                         } else {
                           print("انت بالخارج");
                           success();
+
                           // AwesomeDialog(
                           //   context: context,
                           //   dialogType: DialogType.noHeader,
                           //   animType: AnimType.bottomSlide,
                           //   title: 'لم يتم تسجيل حضورك انت خارج الجامعة ',
-                          //   // desc: 'Dialog description here.............',
                           //   btnCancelText: "الرجوع",
                           //   btnCancelOnPress: () {
                           //     Navigator.pop(context);

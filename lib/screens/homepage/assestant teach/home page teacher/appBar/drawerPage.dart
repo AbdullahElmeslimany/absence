@@ -20,6 +20,9 @@ class DrawerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(idTeach);
+    print(fullnameTeach);
+    print(data);
     return Drawer(
         child: ListView(
       children: [
