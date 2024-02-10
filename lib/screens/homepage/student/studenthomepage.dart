@@ -28,15 +28,7 @@ class StudentHomePage extends StatefulWidget {
 
 class _StudentHomePageState extends State<StudentHomePage> {
   bool enable = true;
-  bool latetime = true;
-  List datasubject = [];
   List datastudent = [];
-  getsubject() async {
-    QuerySnapshot quiry =
-        await FirebaseFirestore.instance.collection("subject").get();
-  }
-
-  List datasection = [];
   bool loading = true;
   ///////////////////////////////////////////////////
   static const String table = "student";
@@ -58,7 +50,6 @@ class _StudentHomePageState extends State<StudentHomePage> {
           print("success");
           print(responsebody["data"]);
           print(datastudent[0]["username"]);
-          // dataTeach.addAll(responsebody["data"]);
           getstream();
         } else if (responsebody["status"] == "failure") {
           print("failure");
@@ -91,8 +82,6 @@ class _StudentHomePageState extends State<StudentHomePage> {
         print(responsebody);
         if (responsebody["status"] == "success") {
           datastudent.addAll(responsebody["data"]);
-          print("success");
-          print(responsebody["data"]);
         } else if (responsebody["status"] == "failure") {
           print("failure");
         }
@@ -102,8 +91,6 @@ class _StudentHomePageState extends State<StudentHomePage> {
     }
   }
 
-  ///
-  ///
   ////////////////////////////////////////////////////////////
 
   String? idusershared;
@@ -124,8 +111,6 @@ class _StudentHomePageState extends State<StudentHomePage> {
         .where("group", isEqualTo: datastudent[0]["group_s"])
         .where("year", isEqualTo: datastudent[0]["year"])
         .snapshots();
-    print("yesssssssssssssssssssssssssssssss");
-    print(sectionsteaheractive);
     setState(() {
       enable = false;
     });
@@ -161,19 +146,6 @@ class _StudentHomePageState extends State<StudentHomePage> {
   @override
   void initState() {
     getdatafromApi();
-    //   getdata();
-    // getshared();
-    //   print(idusershared);
-    //   print(studentdata);
-    //  print(prefshared.getString("firstname"));
-    //  print(pref.getString("firstname"));
-    //   print(subjectClasses["firstterm"]["Informationsystems"]["second"]);
-    //  // // getdatachectactivesction();
-    //   getsubject();
-    //   print("id ++-+-+-+-+----+-+-+");
-    //   print(idusershared);
-    //   print("id ++-+-+----+-+----+-+-+");
-
     getdataformmemory();
     super.initState();
   }
@@ -191,7 +163,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
         : Scaffold(
             key: scaffoldKey,
             appBar: AppBar(),
-            endDrawer: DrawerStudent(studentdata: "studentdata"),
+            endDrawer: DrawerStudent(studentdata: datastudent),
             body: SingleChildScrollView(
               physics: const NeverScrollableScrollPhysics(),
               child: SafeArea(
@@ -200,7 +172,11 @@ class _StudentHomePageState extends State<StudentHomePage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const Gap(10),
-                      cardinfo(context),
+                      cardinfo(
+                          username: datastudent[0]['username'],
+                          section: datastudent[0]['section'],
+                          group: datastudent[0]['group_s'],
+                          year: datastudent[0]['year']),
                       const Gap(20),
                       /////////////////////////////////////////////////////
                       Container(
@@ -392,131 +368,10 @@ class _StudentHomePageState extends State<StudentHomePage> {
               ),
             ),
           );
-    //  Scaffold(
-    //     endDrawer: DrawerStudent(studentdata: studentdata),
-    //     appBar: AppBar(
-    //         backgroundColor: Colors.blueGrey,
-    //         title: Padding(
-    //           padding: const EdgeInsets.only(left: 50.0),
-    //           child: Center(
-    //               child: Text("مرحبا بك  ${studentdata[0]["name"]}")),
-    //         )),
-    //     body: Padding(
-    //       padding: const EdgeInsets.only(top: 20.0),
-    //       child:
-    // StreamBuilder(
-    //         stream: sectionsteaheractive,
-    //         builder: (BuildContext context,
-    //             AsyncSnapshot<QuerySnapshot> snapshot) {
-    //           if (snapshot.hasError) {
-    //             return const Text("erorr");
-    //           }
-    //           if (snapshot.connectionState == ConnectionState.waiting) {
-    //             return const Center(child: CircularProgressIndicator());
-    //           }
-
-    //           return ListView.builder(
-    //             itemCount: snapshot.data!.docs.length,
-    //             itemBuilder: (context, index) {
-    //               return InkWell(
-    //                   onTap: () {
-    //                     if (snapshot.data!.docs[index]["active"] == true) {
-    //                       // print(snapshot.data!.docs[index]["idRandom"]);
-    //                       Navigator.push(
-    //                           context,
-    //                           MaterialPageRoute(
-    //                               builder: (context) => StudentAttendance(
-    //                                   idstudent: studentuser.docs[0].id,
-    //                                   dataStudent: studentdata,
-    //                                   subjectname: snapshot
-    //                                       .data!.docs[index]["namesubject"],
-    //                                   idRandom: snapshot.data!.docs[index]
-    //                                       ["idRandom"])));
-    //                     } else {
-    //                       print("غير متاج");
-    //                     }
-    //                   },
-    //                   child: Column(
-    //                     mainAxisAlignment: MainAxisAlignment.end,
-    //                     crossAxisAlignment: CrossAxisAlignment.stretch,
-    //                     children: [
-    //                       Container(
-    //                           padding:
-    //                               const EdgeInsetsDirectional.symmetric(
-    //                                   horizontal: 20),
-    //                           alignment: Alignment.centerRight,
-    //                           height: 70,
-    //                           width: MediaQuery.sizeOf(context).width - 20,
-    //                           decoration:
-    //                               const BoxDecoration(color: Colors.white),
-    //                           child: Row(
-    //                             mainAxisAlignment:
-    //                                 MainAxisAlignment.spaceBetween,
-    //                             children: [
-    //                               snapshot.data!.docs[index]["active"] ==
-    //                                       true
-    //                                   ? const Column(
-    //                                       mainAxisAlignment:
-    //                                           MainAxisAlignment.end,
-    //                                       children: [
-    //                                         Icon(
-    //                                           Icons.check_circle_outlined,
-    //                                           color: Color.fromARGB(
-    //                                               255, 2, 136, 53),
-    //                                           size: 30,
-    //                                           weight: 50,
-    //                                         ),
-    //                                         Text(
-    //                                           "متاح",
-    //                                           style: TextStyle(
-    //                                               fontSize: 15,
-    //                                               fontWeight:
-    //                                                   FontWeight.bold),
-    //                                         )
-    //                                       ],
-    //                                     )
-    //                                   : const Column(
-    //                                       mainAxisAlignment:
-    //                                           MainAxisAlignment.end,
-    //                                       children: [
-    //                                         Icon(
-    //                                           Icons
-    //                                               .dnd_forwardslash_outlined,
-    //                                           color: Colors.grey,
-    //                                           size: 30,
-    //                                         ),
-    //                                         Text(
-    //                                           "غير متاح",
-    //                                           style: TextStyle(
-    //                                               fontSize: 15,
-    //                                               fontWeight:
-    //                                                   FontWeight.bold),
-    //                                         )
-    //                                       ],
-    //                                     ),
-    //                               Text(
-    //                                 snapshot.data!.docs[index]
-    //                                     ["namesubject"],
-    //                                 style: const TextStyle(
-    //                                     fontSize: 20,
-    //                                     fontWeight: FontWeight.bold),
-    //                               ),
-    //                             ],
-    //                           )),
-    //                       const SizedBox(
-    //                         height: 7,
-    //                       )
-    //                     ],
-    //                   ));
-    //             },
-    //           );
-    //         },
-    //       ),
-    //     ),
-    //   );
   }
 
-  Container cardinfo(BuildContext context) {
+  Container cardinfo(
+      {required username, required section, required group, required year}) {
     return Container(
       width: MediaQuery.sizeOf(context).width - 30,
       height: 170,
@@ -530,31 +385,47 @@ class _StudentHomePageState extends State<StudentHomePage> {
             style: TextStyle(
                 color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
           ),
-          Text("${datastudent[0]['username']}",
+          Text("$username",
               style: const TextStyle(
                   color: Colors.white,
                   fontSize: 20,
                   fontWeight: FontWeight.bold)),
           const Gap(15),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Text("سكشن : ${datastudent[0]['section']}",
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold)),
-              Text("${datastudent[0]['group_s']} : المجموعة",
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold)),
-              Text("${datastudent[0]['year']}",
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold)),
-            ],
+          Container(
+            height: 32,
+            width: MediaQuery.sizeOf(context).width - 37,
+            decoration: BoxDecoration(
+                color: Colors.white, borderRadius: BorderRadius.circular(5)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text("سكشن : $section",
+                    style: const TextStyle(
+                        // color: Colors.white,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold)),
+                Container(
+                  color: Colors.grey,
+                  width: 1,
+                  height: 27,
+                ),
+                Text("$group : المجموعة",
+                    style: const TextStyle(
+                        // color: Colors.white,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold)),
+                Container(
+                  color: Colors.grey,
+                  width: 1,
+                  height: 27,
+                ),
+                Text("$year",
+                    style: const TextStyle(
+                        // color: Colors.white,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold)),
+              ],
+            ),
           ),
           const Gap(15),
           const Text("نسعد اليوم بوجودك معنا نتمني ان تكون في افضل حال",

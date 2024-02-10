@@ -99,11 +99,7 @@ class _StudentAttendanceState extends State<StudentAttendance> {
                         setState(() {
                           String code = barcode.rawValue ?? '----------';
                           latecode = code;
-                          print("+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+==+=+");
                           print(latecode.runtimeType);
-
-                          print("+=+=+=+=+=++=+=+=+=+=+=+=+==+=+");
-
                           isScanCompleted = true;
                         });
 
@@ -119,84 +115,19 @@ class _StudentAttendanceState extends State<StudentAttendance> {
                           print("انت بالداخل");
                         } else {
                           print("انت بالخارج");
+                          success();
+                          // AwesomeDialog(
+                          //   context: context,
+                          //   dialogType: DialogType.noHeader,
+                          //   animType: AnimType.bottomSlide,
+                          //   title: 'لم يتم تسجيل حضورك انت خارج الجامعة ',
+                          //   // desc: 'Dialog description here.............',
+                          //   btnCancelText: "الرجوع",
+                          //   btnCancelOnPress: () {
+                          //     Navigator.pop(context);
+                          //   },
+                          // ).show();
                         }
-                        // if (datagetrandom[0]["randomSubject"].toString() ==
-                        //     latecode.toString()) {
-                        //   ////////////////////////////////////////
-                        //   String table = widget.datasection["table"];
-                        //   String day = widget.datasection["daytablename"];
-                        //   String value = "1";
-                        //   String iduniversity = (widget.idstudent).toString();
-
-                        //   try {
-                        //     var responce = await http
-                        //         .post(Uri.parse(Link.updatelink), body: {
-                        //       "table": table,
-                        //       "day": day,
-                        //       "value": value,
-                        //       "iduniversity": iduniversity,
-                        //     });
-
-                        //     // check is connect or no
-                        //     if (responce.statusCode == 200 ||
-                        //         responce.statusCode == 201) {
-                        //       Map responsebody = jsonDecode(responce.body);
-
-                        //       print(responsebody);
-                        //       if (responsebody["status"] == "success") {
-                        //         print(responsebody["data"]);
-
-                        //         print("success");
-                        //         if (responsebody["data"][0]["rank"] == 1) {
-                        //           print("scussess");
-                        //           // Navigator.pushReplacement(
-                        //           //     context,
-                        //           //     MaterialPageRoute(
-                        //           //         builder: (context) =>
-                        //           //             HomePage()));
-                        //         } else {}
-                        //       } else if (responsebody["status"] == "failure") {
-                        //         // Get.defaultDialog(
-                        //         //     title: "ُWarning",
-                        //         //     middleText: "Password Or Email");
-                        //       }
-                        //     }
-                        //   } catch (e) {
-                        //     print(e);
-                        //   }
-
-                        //   //////////////////////////////////////////////
-                        //   Vibration.vibrate(duration: 350, amplitude: 128);
-                        //   AwesomeDialog(
-                        //     context: context,
-                        //     dialogType: DialogType.success,
-                        //     animType: AnimType.bottomSlide,
-                        //     title: 'تم تسجيل حضورك بنجاح',
-                        //     desc: '${widget.subjectname}',
-                        //     descTextStyle: const TextStyle(
-                        //         fontSize: 24, fontWeight: FontWeight.bold),
-                        //     btnOkOnPress: () {
-                        //       Navigator.pop(context);
-                        //     },
-                        //   ).show();
-
-                        //   setState(() {
-                        //     active = true;
-                        //   });
-                        // } else {
-                        //   // Vibration.vibrate(pattern: [500, 0, 0, 200]);
-                        //   AwesomeDialog(
-                        //     context: context,
-                        //     dialogType: DialogType.error,
-                        //     animType: AnimType.bottomSlide,
-                        //     title: 'لم  يتم تسجيل حضورك اعد المحاولة',
-                        //     // desc: 'Dialog description here.............',
-                        //     btnCancelText: "الرجوع",
-                        //     btnCancelOnPress: () {
-                        //       Navigator.pop(context);
-                        //     },
-                        //   ).show();
-                        // }
                       }
                     },
                   ),
@@ -239,5 +170,67 @@ class _StudentAttendanceState extends State<StudentAttendance> {
         ],
       ),
     );
+  }
+
+  success() async {
+    if (datagetrandom[0]["randomSubject"].toString() == latecode.toString()) {
+      ////////////////////////////////////////
+      String table = widget.datasection["table"];
+      String day = widget.datasection["daytablename"];
+      String value = "1";
+      String iduniversity = (widget.idstudent).toString();
+
+      try {
+        var responce = await http.post(Uri.parse(Link.updatelink), body: {
+          "table": table,
+          "day": day,
+          "value": value,
+          "iduniversity": iduniversity,
+        });
+
+        // check is connect or no
+        if (responce.statusCode == 200 || responce.statusCode == 201) {
+          Map responsebody = jsonDecode(responce.body);
+
+          print(responsebody);
+          if (responsebody["status"] == "success") {
+            print(responsebody["data"]);
+
+            print("success");
+            Vibration.vibrate(duration: 350, amplitude: 128);
+            AwesomeDialog(
+              context: context,
+              dialogType: DialogType.success,
+              animType: AnimType.bottomSlide,
+              title: 'تم تسجيل حضورك بنجاح',
+              desc: '${widget.subjectname}',
+              descTextStyle:
+                  const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              btnOkOnPress: () {
+                Navigator.pop(context);
+              },
+            ).show();
+          } else if (responsebody["status"] == "failure") {
+            AwesomeDialog(
+              context: context,
+              dialogType: DialogType.error,
+              animType: AnimType.bottomSlide,
+              title: 'لم  يتم تسجيل حضورك اعد المحاولة',
+              // desc: 'Dialog description here.............',
+              btnCancelText: "الرجوع",
+              btnCancelOnPress: () {
+                Navigator.pop(context);
+              },
+            ).show();
+          }
+        }
+      } catch (e) {
+        print(e);
+      }
+
+      //////////////////////////////////////////////
+    } else {
+      // Vibration.vibrate(pattern: [500, 0, 0, 200]);
+    }
   }
 }

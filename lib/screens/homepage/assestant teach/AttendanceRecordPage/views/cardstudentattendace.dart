@@ -1,4 +1,4 @@
-import 'package:absence/screens/homepage/assestant%20teach/Attendance%20Record%20Page/logic/attendancetrueorfalse.dart';
+import 'package:absence/screens/homepage/assestant%20teach/AttendanceRecordPage/logic/attendancetrueorfalse.dart';
 import 'package:flutter/material.dart';
 
 Card cardStudentAttendanse(

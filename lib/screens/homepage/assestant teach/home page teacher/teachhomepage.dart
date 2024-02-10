@@ -8,6 +8,7 @@ import 'package:absence/screens/homepage/assestant%20teach/home%20page%20teacher
 import 'package:absence/screens/homepage/assestant%20teach/home%20page%20teacher/views/card_section.dart';
 import 'package:absence/screens/homepage/assestant%20teach/home%20page%20teacher/views/card_teacher.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,7 @@ class TechHomePage extends StatefulWidget {
 
 class _TechHomePageState extends State<TechHomePage> {
   bool loading = true;
+  String? type;
   getdatafromApi({required table, required idmail}) async {
     try {
       var responce = await http.post(Uri.parse(Link.getdatalink),
@@ -118,11 +120,8 @@ class _TechHomePageState extends State<TechHomePage> {
                               itemBuilder: (BuildContext context, int index) {
                                 return InkWell(
                                   onTap: () async {
-                                    await buttonClickLogic(
-                                        id: snapshot.data!.docs[index].id,
-                                        snapshot,
-                                        index,
-                                        context);
+                                    Get.dialog(
+                                        dailogScreen(snapshot, index, context));
                                   },
                                   child: cardSection(
                                       teachername: snapshot.data!.docs[index]
@@ -144,6 +143,98 @@ class _TechHomePageState extends State<TechHomePage> {
                 ),
               )),
             ),
+    );
+  }
+
+  Dialog dailogScreen(AsyncSnapshot<QuerySnapshot<Object?>> snapshot, int index,
+      BuildContext context) {
+    return Dialog(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: SizedBox(
+          height: 295,
+          child: Column(
+            children: [
+              const Text(
+                "اختار يوم السكشن",
+                style: TextStyle(
+                    fontSize: 19,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black),
+              ),
+              SizedBox(
+                height: 215,
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 4),
+                  itemCount: 9,
+                  itemBuilder: (BuildContext context, int index) {
+                    return RadioMenuButton(
+                      value: "$index",
+                      groupValue: type,
+                      onChanged: (value) {
+                        setState(() {
+                          type = value!;
+                          print(value);
+                        });
+                      },
+                      child: Text('${index + 1}'),
+                    );
+                  },
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(
+                      width: 95,
+                      height: 40,
+                      decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(12)),
+                      child: Center(
+                          child: MaterialButton(
+                        onPressed: () {
+                          Get.back();
+                        },
+                        child: const Text(
+                          "الغاء",
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
+                      ))),
+                  Container(
+                      width: 95,
+                      height: 40,
+                      decoration: BoxDecoration(
+                          color: Colors.teal[400],
+                          borderRadius: BorderRadius.circular(12)),
+                      child: Center(
+                          child: MaterialButton(
+                        onPressed: () async {
+                          await buttonClickLogic(
+                              day: type,
+                              id: snapshot.data!.docs[index].id,
+                              snapshot,
+                              index,
+                              context);
+                        },
+                        child: const Text(
+                          "بدا الغياب",
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
+                      ))),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

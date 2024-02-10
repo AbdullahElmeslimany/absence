@@ -1,7 +1,7 @@
 import 'package:absence/LoginPage/completRegester.dart';
 import 'package:absence/LoginPage/login.dart';
 import 'package:absence/constant/constant.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 
 class RegesterPage extends StatefulWidget {
@@ -131,25 +131,25 @@ class _RegesterPageState extends State<RegesterPage> {
                               fontWeight: FontWeight.bold),
                         ),
                         onPressed: () async {
-                          await FirebaseAuth.instance
-                              .createUserWithEmailAndPassword(
-                                  email: email!, password: password!,)
-                              .then((value) {
-                            final user = FirebaseAuth.instance.currentUser;
-                            if (user != null) {
-                              final uid = user.uid;
-                              print(uid);
+                          // await FirebaseAuth.instance
+                          //     .createUserWithEmailAndPassword(
+                          //         email: email!, password: password!,)
+                          //     .then((value) {
+                          //   final user = FirebaseAuth.instance.currentUser;
+                          //   if (user != null) {
+                          //     final uid = user.uid;
+                          //     print(uid);
                               
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => CompletReqester(
-                                        uid: uid,
-                                        fullname: name,
-                                        nationalID: nationalID),
-                                  ));
-                            }
-                          });
+                          //     Navigator.pushReplacement(
+                          //         context,
+                          //         MaterialPageRoute(
+                          //           builder: (context) => CompletReqester(
+                          //               uid: uid,
+                          //               fullname: name,
+                          //               nationalID: nationalID),
+                          //         ));
+                          //   }
+                          // });
                         },
                       ),
                     ),

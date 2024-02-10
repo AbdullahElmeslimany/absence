@@ -2,7 +2,9 @@ import 'package:absence/LoginPage/login.dart';
 import 'package:absence/Privacypage/privacypolicy.dart';
 import 'package:absence/Privacypage/termsandconditions.dart';
 import 'package:absence/screens/homepage/student/personedata.dart';
+import 'package:absence/screens/homepage/student/show_day_attendance_page/show_page_attendance.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DrawerStudent extends StatelessWidget {
@@ -37,6 +39,20 @@ class DrawerStudent extends StatelessWidget {
         ),
         InkWell(
           child: const ListTile(
+            leading: Icon(Icons.checklist_rounded, size: 26),
+            title: Text(
+              'غيابك',
+              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+            ),
+          ),
+          onTap: () {
+            Get.to(ShowDayAttendance(
+              data: studentdata,
+            ));
+          },
+        ),
+        InkWell(
+          child: const ListTile(
             leading: Icon(Icons.privacy_tip_outlined, size: 26),
             title: Text(
               'سياسة الخصوصية',
@@ -44,14 +60,11 @@ class DrawerStudent extends StatelessWidget {
             ),
           ),
           onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const PrivacyPolicy()
-                ));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const PrivacyPolicy()));
           },
         ),
-         InkWell(
+        InkWell(
           child: const ListTile(
             leading: Icon(Icons.text_snippet_rounded, size: 26),
             title: Text(
@@ -63,8 +76,7 @@ class DrawerStudent extends StatelessWidget {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const TermsandConditions()
-                ));
+                    builder: (context) => const TermsandConditions()));
           },
         ),
         InkWell(

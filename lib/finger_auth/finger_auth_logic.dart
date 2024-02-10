@@ -5,7 +5,7 @@ import 'package:local_auth_ios/local_auth_ios.dart';
 fingerAuth() async {
   final LocalAuthentication auth = LocalAuthentication();
   final bool didAuthenticate = await auth.authenticate(
-      options: AuthenticationOptions(),
+      options: const AuthenticationOptions(),
       localizedReason: 'يرجي اعطاء بصمة اصبعك للدخول',
       authMessages: const <AuthMessages>[
         AndroidAuthMessages(
@@ -17,5 +17,4 @@ fingerAuth() async {
           cancelButton: 'No thanks',
         ),
       ]);
-  print(didAuthenticate);
 }

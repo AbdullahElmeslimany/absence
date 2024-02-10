@@ -7,9 +7,11 @@ import 'package:absence/constant/link.dart';
 import 'package:absence/screens/homepage/assestant%20teach/home%20page%20teacher/teachhomepage.dart';
 import 'package:absence/screens/homepage/student/studenthomepage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:absence/test/testpage.dart';
+import 'package:gap/gap.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -112,6 +114,9 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
   }
 
+  GlobalKey<FormState> loginkey = GlobalKey<FormState>();
+  TextEditingController idnatinalController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -147,60 +152,65 @@ class _LoginPageState extends State<LoginPage> {
                             height: 200,
                             child: Image.asset("assets/images/logo.png")),
                         const SizedBox(
-                          height: 20,
+                          height: 10,
                         ),
                         Text(
                           "مرحبا بك",
                           style: GoogleFonts.alexandria(
                               fontSize: 30, color: darkcolor),
-                          // style: TextStyle(
-                          //     fontWeight: FontWeight.bold,
-                          //     fontSize: 40,
-                          // fontFamily: font2
-                          //     ),
                         ),
-                        Container(
-                          height: 200,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(25)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                TextFormField(
-                                  autofocus: true,
-                                  keyboardType: TextInputType.emailAddress,
-                                  decoration: const InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    labelText: "الرقم القومي",
+                        const Gap(12),
+                        Form(
+                          key: loginkey,
+                          child: Container(
+                            height: 210,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(25)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  TextFormField(
+                                    controller: idnatinalController,
+                                    textDirection: TextDirection.ltr,
+                                    autofocus: true,
+                                    keyboardType: TextInputType.number,
+                                    decoration: const InputDecoration(
+                                      border: OutlineInputBorder(),
+                                      labelText: "الرقم القومي",
+                                    ),
+                                    textAlign: TextAlign.start,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'يرجي ادخال الرقم القومي';
+                                      }
+                                      return null;
+                                    },
                                   ),
-                                  textAlign: TextAlign.start,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      nationalid = value;
-                                    });
-                                  },
-                                ),
-                                const SizedBox(
-                                  height: 17,
-                                ),
-                                TextFormField(
-                                  obscureText: true,
-                                  keyboardType: TextInputType.visiblePassword,
-                                  decoration: const InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    labelText: "الباسورد",
+                                  const SizedBox(
+                                    height: 17,
                                   ),
-                                  textAlign: TextAlign.start,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      password = value;
-                                    });
-                                  },
-                                ),
-                              ],
+                                  TextFormField(
+                                    controller: passwordController,
+                                    textDirection: TextDirection.ltr,
+                                    obscureText: true,
+                                    keyboardType: TextInputType.visiblePassword,
+                                    decoration: const InputDecoration(
+                                      border: OutlineInputBorder(),
+                                      labelText: "الباسورد",
+                                    ),
+                                    textAlign: TextAlign.start,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'يرجي ادخال الباسورد';
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -210,13 +220,13 @@ class _LoginPageState extends State<LoginPage> {
                         Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(25),
-                            color: buttonColor,
+                            color: darkcolor,
                           ),
                           width: 190,
                           child: MaterialButton(
                             height: 30,
                             child: loadButton == true
-                                ? CircularProgressIndicator()
+                                ? const CircularProgressIndicator()
                                 : const Text(
                                     "تسجيل الدخول",
                                     style: TextStyle(
@@ -225,164 +235,94 @@ class _LoginPageState extends State<LoginPage> {
                                         fontWeight: FontWeight.bold),
                                   ),
                             onPressed: () async {
-                              setState(() {
-                                loadButton = true;
-                              });
-                              ///////////////////////////////////////////////////////////////////
-
-                              List data = [];
-                              print("////////////////////////////////////");
-                              print(nationalid);
-                              print(password);
-                              print("////////////////////////////////////");
-
-                              try {
-                                var responce = await http
-                                    .post(Uri.parse(Link.loginlink), body: {
-                                  "nattional_id": nationalid,
-                                  "password": password!,
+                              if (loginkey.currentState!.validate()) {
+                                setState(() {
+                                  loadButton = true;
                                 });
+                                List data = [];
+                                try {
+                                  var responce = await http
+                                      .post(Uri.parse(Link.loginlink), body: {
+                                    "nattional_id": idnatinalController.text,
+                                    "password": passwordController.text,
+                                  });
+                                  // check is connect or no
+                                  if (responce.statusCode == 200 ||
+                                      responce.statusCode == 201) {
+                                    Map responsebody =
+                                        jsonDecode(responce.body);
 
-                                // check is connect or no
-                                if (responce.statusCode == 200 ||
-                                    responce.statusCode == 201) {
-                                  Map responsebody = jsonDecode(responce.body);
+                                    print(responsebody);
+                                    if (responsebody["status"] == "success") {
+                                      data.addAll(responsebody["data"]);
 
-                                  print(responsebody);
-                                  if (responsebody["status"] == "success") {
-                                    // print(responsebody["data"]);
-                                    data.addAll(responsebody["data"]);
-                                    print(data[0]["nattional_id"]);
-                                    print((responsebody["data"][0]["rank"])
-                                        .toString());
-                                    setState(() {
-                                      loadButton = false;
-                                    });
-                                    print("success");
-                                    SharedPreferences prefsAdd =
-                                        await SharedPreferences.getInstance();
-                                    prefsAdd.setInt(
-                                        "idmail", data[0]["nattional_id"]);
-                                    prefsAdd.setInt("rank", data[0]["rank"]);
-                                    prefsAdd.setBool("repeat", true);
-                                    // prefs.setBool("repeat", true);
-                                    print(prefs.getInt("idmail"));
-                                    print(prefs.getInt("rank"));
-                                    print(prefs.getBool("repeat"));
-                                    if (responsebody["data"][0]["rank"] == 1) {
-                                      print("scussess");
+                                      setState(() {
+                                        loadButton = false;
+                                      });
+                                      print("success");
+                                      SharedPreferences prefsAdd =
+                                          await SharedPreferences.getInstance();
+                                      prefsAdd.setInt(
+                                          "idmail", data[0]["nattional_id"]);
+                                      prefsAdd.setInt("rank", data[0]["rank"]);
+                                      prefsAdd.setBool("repeat", true);
 
-                                      print("pppppppppppppppppppppppppppppppp");
-                                      int? id = prefs.getInt("idmail");
-                                      print(id);
-                                      print("pppppppppppppppppppppppppppppppp");
-                                      Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => TechHomePage(
+                                      if (responsebody["data"][0]["rank"] ==
+                                          1) {
+                                        print("scussess");
+                                        Get.offAll(
+                                            TechHomePage(
                                                 idmail: data[0]
                                                     ["nattional_id"]),
-                                          ));
-                                    } else if (responsebody["data"][0]
-                                            ["rank"] ==
-                                        0) {
-                                      // prefs.setBool("repeat", true);
-                                      prefs.setInt(
-                                          "idmail", data[0]["nattional_id"]);
-                                      print("rank = 0");
-                                      Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                StudentHomePage(
-                                                    idmail: data[0]
-                                                        ["nattional_id"]),
-                                          ));
+                                            transition:
+                                                Transition.circularReveal);
+                                      } else if (responsebody["data"][0]
+                                              ["rank"] ==
+                                          0) {
+                                        prefs.setInt(
+                                            "idmail", data[0]["nattional_id"]);
+                                        Get.offAll(
+                                            StudentHomePage(
+                                                idmail: data[0]
+                                                    ["nattional_id"]),
+                                            transition: Transition.fade);
+                                      }
+                                    } else if (responsebody["status"] ==
+                                        "failure") {
+                                      setState(() {
+                                        loadButton = false;
+                                      });
+                                      Get.dialog(
+                                        const Directionality(
+                                          textDirection: TextDirection.rtl,
+                                          child: AlertDialog(
+                                            title: Text("خطاء"),
+                                            content: Text(
+                                                "الرقم القومي او الرقم السري خاطيء"),
+                                          ),
+                                        ),
+                                      );
+                                      print("failure");
                                     }
-                                  } else if (responsebody["status"] ==
-                                      "failure") {
+                                  } else {
                                     setState(() {
                                       loadButton = false;
                                     });
-                                    print("failure");
-                                    showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return Directionality(
-                                            textDirection: TextDirection.rtl,
-                                            child: const AlertDialog(
-                                              title: Text("خطاء"),
-                                              content: Text(
-                                                  "الرقم القومي او الرقم السري خاطيء"),
-                                            ),
-                                          );
-                                        });
+                                    Get.dialog(
+                                      const Directionality(
+                                        textDirection: TextDirection.rtl,
+                                        child: AlertDialog(
+                                          title: Text("خطاء الاتصال بالانترنت"),
+                                          content: Text(
+                                              "يرجي فحص الشبكة الخاصة بك ومعاومة المحاولة"),
+                                        ),
+                                      ),
+                                    );
                                   }
+                                } catch (e) {
+                                  print(e);
                                 }
-                              } catch (e) {
-                                print(e);
                               }
-
-                              /////////////////////////////////////////////////////////////////////
-                              // try {
-                              //   await FirebaseAuth.instance
-                              //       .signInWithEmailAndPassword(
-                              //           email: nationalid!, password: password!)
-                              //       .then((value) async {
-                              //     String uid =
-                              //         FirebaseAuth.instance.currentUser!.uid;
-                              //     prefs.setString("idmail", uid);
-                              //     prefs.setBool("repeat", true);
-                              //     print(prefs.getString("idmail"));
-                              //     print(uid);
-
-                              //     List checkData = [];
-                              //     await FirebaseFirestore.instance
-                              //         .collection("allusers")
-                              //         .where("idemail", isEqualTo: uid)
-                              //         .get()
-                              //         .then((value) async {
-                              //       checkData.addAll(value.docs);
-                              //       print(
-                              //           "=============================================");
-                              //       print(checkData[0]["rank"]);
-                              //       print(
-                              //           "=============================================");
-                              //       prefshared =
-                              //           await SharedPreferences.getInstance();
-                              //       prefshared.setString(
-                              //         "rank",
-                              //         checkData[0]["rank"],
-                              //       );
-                              //     });
-                              //     if (checkData[0]["rank"] == "1") {
-                              //       // ignore: use_build_context_synchronously
-                              //       Navigator.pushReplacement(
-                              //           context,
-                              //           MaterialPageRoute(
-                              //             builder: (context) =>
-                              //                 TechHomePage(idmail: uid),
-                              //           ));
-                              //     } else if (checkData[0]["rank"] == "0") {
-                              //       // ignore: use_build_context_synchronously
-                              //       Navigator.pushReplacement(
-                              //           context,
-                              //           MaterialPageRoute(
-                              //             builder: (context) =>
-                              //                 StudentHomePage(idmail: uid),
-                              //           ));
-                              //     }
-                              //   });
-                              // } on FirebaseAuthException catch (e) {
-                              //   if (e.code == 'user-not-found') {
-                              //     print('No user found for that email.');
-                              //     print('-=============================-=-=');
-                              //   } else if (e.code == 'wrong-password') {
-                              //     print('Wrong password provided for that user.');
-                              //     print('-=============================-=-=');
-                              //   }
-                              // }
-                              //////////////////////////////////////////////////////////////
                             },
                           ),
                         ),
@@ -391,31 +331,31 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(
                       height: 20,
                     ),
-                    MaterialButton(
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const RegesterPage(),
-                            ));
-                      },
-                      child: Container(
-                        width: 120,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(25),
-                          color: const Color.fromARGB(255, 248, 86, 74),
-                        ),
-                        child: const Center(
-                          child: Text(
-                            "ليس لدي حساب",
-                            style: TextStyle(
-                                fontSize: 17,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                    ),
+                    // MaterialButton(
+                    //   onPressed: () {
+                    //     Navigator.pushReplacement(
+                    //         context,
+                    //         MaterialPageRoute(
+                    //           builder: (context) => const RegesterPage(),
+                    //         ));
+                    //   },
+                    //   child: Container(
+                    //     width: 120,
+                    //     decoration: BoxDecoration(
+                    //       borderRadius: BorderRadius.circular(25),
+                    //       color: const Color.fromARGB(255, 248, 86, 74),
+                    //     ),
+                    //     child: const Center(
+                    //       child: Text(
+                    //         "ليس لدي حساب",
+                    //         style: TextStyle(
+                    //             fontSize: 17,
+                    //             color: Colors.white,
+                    //             fontWeight: FontWeight.bold),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
