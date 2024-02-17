@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:absence/constant/link.dart';
+import 'package:absence/screens/homepage/student/show_day_attendance_page/cubit/show_attendance_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:http/http.dart' as http;
 
@@ -14,86 +16,155 @@ class ShowDayAttendance extends StatefulWidget {
 }
 
 class _ShowDayAttendanceState extends State<ShowDayAttendance> {
-  List? data = [];
-  bool active = true;
-  int id = 20231212;
-
-  getDataFromAPI({required link, required id, required mapdata}) async {
-    try {
-      var responce =
-          await http.post(Uri.parse(link), body: {"id": id.toString()});
-      if (responce.statusCode == 200 || responce.statusCode == 201) {
-        Map responsebody = jsonDecode(responce.body);
-        if (responsebody["status"] == "success") {
-          for (var i = 0; i < 9; i++) {
-            mapdata.insert(i, {"day": responsebody["data"][0]["s_${i + 1}"]});
-          }
-          setState(() {
-            active = false;
-          });
-          print("success");
-        } else if (responsebody["status"] == "failure") {
-          print("failure");
-        }
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
   @override
   void initState() {
-    getDataFromAPI(
-        link: Link.test, id: widget.data[0]["id_university"], mapdata: data);
+    BlocProvider.of<ShowAttendanceCubit>(context).getDataFromAPI(
+        link: Link.test,
+        id: widget.data[0]["id_university"],
+        mapdata: BlocProvider.of<ShowAttendanceCubit>(context).data);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: active == true
-          ? const Center(child: CircularProgressIndicator())
-          : SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("برمجة هيكلية متقدمة"),
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: 1,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Column(
+    return BlocConsumer<ShowAttendanceCubit, ShowAttendanceState>(
+      listener: (context, state) {
+        if (state is SuccessDataState) {}
+        if (state is LoadingState) {}
+      },
+      builder: (context, state) {
+        return Scaffold(
+          body: BlocProvider.of<ShowAttendanceCubit>(context).active == true
+              ? const Center(child: CircularProgressIndicator())
+              : SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        const Text(
+                          "كشف غيابك",
+                          style: TextStyle(
+                              fontSize: 30, fontWeight: FontWeight.bold),
+                        ),
+                        Expanded(
+                          child: Column(
+                            // mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Container(
-                                color: Colors.grey[200],
-                                height: 70,
-                                child: ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: 9,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return Column(
-                                      children: [
-                                        dayOption(
-                                            active: data?[index]["day"],
-                                            day: index + 1),
-                                      ],
-                                    );
-                                  },
-                                ),
+                              const Text("برمجة هيكلية متقدمة",
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold)),
+                              Column(
+                                children: [
+                                  const Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text("سكشن",
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold)),
+                                    ],
+                                  ),
+                                  Container(
+                                    color: Colors.grey[200],
+                                    height: 70,
+                                    child: ListView.builder(
+                                      itemCount: 1,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        return Column(
+                                          children: [
+                                            Container(
+                                              color: Colors.grey[200],
+                                              height: 70,
+                                              child: ListView.builder(
+                                                scrollDirection:
+                                                    Axis.horizontal,
+                                                itemCount: 10,
+                                                itemBuilder:
+                                                    (BuildContext context,
+                                                        int index) {
+                                                  return Column(
+                                                    children: [
+                                                      dayOption(
+                                                          active: BlocProvider
+                                                                  .of<ShowAttendanceCubit>(
+                                                                      context)
+                                                              .data?[index]["day"],
+                                                          day: index + 1),
+                                                    ],
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                            const Gap(3)
+                                          ],
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
                               ),
-                              const Gap(3)
+                              Column(
+                                children: [
+                                  const Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text("محاضرات",
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold)),
+                                    ],
+                                  ),
+                                  Container(
+                                    color: Colors.grey[200],
+                                    height: 70,
+                                    child: ListView.builder(
+                                      itemCount: 1,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        return Column(
+                                          children: [
+                                            Container(
+                                              color: Colors.grey[200],
+                                              height: 70,
+                                              child: ListView.builder(
+                                                scrollDirection:
+                                                    Axis.horizontal,
+                                                itemCount: 10,
+                                                itemBuilder:
+                                                    (BuildContext context,
+                                                        int index) {
+                                                  return Column(
+                                                    children: [
+                                                      dayOption(
+                                                          active: BlocProvider
+                                                                  .of<ShowAttendanceCubit>(
+                                                                      context)
+                                                              .data?[index]["day"],
+                                                          day: index + 1),
+                                                    ],
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                            const Gap(3)
+                                          ],
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ],
-                          );
-                        },
-                      ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
+        );
+      },
     );
   }
 

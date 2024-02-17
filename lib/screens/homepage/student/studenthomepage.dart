@@ -1,17 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:math';
-
+import 'package:http/http.dart' as http;
 import 'package:absence/constant/constant.dart';
 import 'package:absence/constant/link.dart';
-import 'package:absence/constant/subject.dart';
 import 'package:absence/screens/homepage/student/studentattendanceCamira.dart';
 import 'package:absence/screens/homepage/student/drawerStudent.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:http/http.dart' as http;
-
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -122,12 +118,12 @@ class _StudentHomePageState extends State<StudentHomePage> {
   RefreshController refreshController = RefreshController(initialRefresh: true);
 
   void onRefresh() async {
-    await Future.delayed(Duration(milliseconds: 1000));
+    await Future.delayed(const Duration(milliseconds: 1000));
     refreshController.refreshCompleted();
   }
 
   void onLoading() async {
-    await Future.delayed(Duration(milliseconds: 1000));
+    await Future.delayed(const Duration(milliseconds: 1000));
     if (mounted) setState(() {});
     refreshController.loadComplete();
   }
@@ -189,9 +185,8 @@ class _StudentHomePageState extends State<StudentHomePage> {
                             builder: (BuildContext context,
                                 AsyncSnapshot<QuerySnapshot> snapshot) {
                               if (snapshot.hasError) {
-                                return Center(
-                                    child:
-                                        const Text("erorrrrrrrrrrrrrrrrrrr"));
+                                return const Center(
+                                    child: Text("erorrrrrrrrrrrrrrrrrrr"));
                               }
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
@@ -204,8 +199,8 @@ class _StudentHomePageState extends State<StudentHomePage> {
                                 onRefresh: onRefresh,
                                 onLoading: onLoading,
                                 enablePullDown: true,
-                                header:
-                                    WaterDropHeader(waterDropColor: Colors.red),
+                                header: const WaterDropHeader(
+                                    waterDropColor: Colors.red),
                                 child: ListView.builder(
                                   itemCount: snapshot.data!.docs.length,
                                   itemBuilder: (context, index) {
@@ -233,24 +228,41 @@ class _StudentHomePageState extends State<StudentHomePage> {
                                                     ["active"] ==
                                                 true) {
                                               // print(snapshot.data!.docs[index]["idRandom"]);
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) => StudentAttendance(
-                                                          idstudent: datastudent[
-                                                                  0]
-                                                              ["id_university"],
-                                                          datasection: snapshot
-                                                              .data!
-                                                              .docs[index],
-                                                          subjectname: snapshot
-                                                                  .data!
-                                                                  .docs[index]
-                                                              ["nameSubject"],
-                                                          idRandom: snapshot
-                                                              .data!
-                                                              .docs[index]
-                                                              .id)));
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////Edit
+                                              // http.post(
+                                              //     Uri.parse(
+                                              //         Link.getDataSection),
+                                              //     body: {
+                                              //       "section": datastudent[0]
+                                              //           ['section'],
+                                              //       "table": snapshot.data!
+                                              //           .docs[index]["table"],
+                                              //       "day": snapshot
+                                              //               .data!.docs[index]
+                                              //           ["daytablename"],
+                                              //     });
+////////////////////////////////////////////////////////////////////////////////////////////////////////////End Edit
+                                              
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) => StudentAttendance(
+                                                            idstudent: datastudent[
+                                                                    0][
+                                                                "id_university"],
+                                                            datasection:
+                                                                snapshot.data!
+                                                                        .docs[
+                                                                    index],
+                                                            subjectname: snapshot
+                                                                    .data!
+                                                                    .docs[index]
+                                                                ["nameSubject"],
+                                                            idRandom: snapshot
+                                                                .data!
+                                                                .docs[index]
+                                                                .id)));
+                                              
                                             } else {
                                               print("غير متاج");
                                             }

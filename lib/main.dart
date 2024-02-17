@@ -2,6 +2,7 @@ import 'package:absence/LoginPage/login.dart';
 import 'package:absence/logic_main_page.dart';
 import 'package:absence/screens/homepage/assestant%20teach/home%20page%20teacher/cubit_radio/radio_custon_cubit_cubit.dart';
 import 'package:absence/screens/homepage/assestant%20teach/home%20page%20teacher/teachhomepage.dart';
+import 'package:absence/screens/homepage/student/show_day_attendance_page/cubit/show_attendance_cubit.dart';
 import 'package:absence/screens/homepage/student/studenthomepage.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -27,6 +28,9 @@ class MyApp extends StatelessWidget {
         providers: [
           BlocProvider<RandomUpdateCubit>(
             create: (BuildContext context) => RandomUpdateCubit(),
+          ),
+          BlocProvider<ShowAttendanceCubit>(
+            create: (BuildContext context) => ShowAttendanceCubit(),
           ),
           BlocProvider(
             create: (context) => RadioCustonCubit(),

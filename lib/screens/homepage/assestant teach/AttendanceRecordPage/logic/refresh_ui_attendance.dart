@@ -4,7 +4,7 @@ class RefreshUiAttendance {
 
  
   RefreshController refreshControllerteacher =
-      RefreshController(initialRefresh: true);
+      RefreshController(initialRefresh: false);
 
   void onRefresh() async {
     await Future.delayed(Duration(milliseconds: 1000));

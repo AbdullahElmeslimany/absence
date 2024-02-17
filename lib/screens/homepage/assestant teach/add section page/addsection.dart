@@ -56,7 +56,7 @@ class _AddSectionState extends State<AddSection> {
             gradient: LinearGradient(
                 end: Alignment.topCenter,
                 begin: Alignment.bottomCenter,
-                colors: [ Colors.white,Colors.white])),
+                colors: [Colors.white, Colors.white])),
         child: Form(
           key: addsectionkey,
           child: SingleChildScrollView(
@@ -336,7 +336,8 @@ class _AddSectionState extends State<AddSection> {
                                                   FirebaseFirestore.instance
                                                       .collection('random')
                                                       .add({
-                                                "idteacher": widget.idTeach,
+                                                "idteacher":
+                                                    "${widget.idTeach}",
                                                 "group": groupcontroller.text,
                                                 "tabledayname": null,
                                                 "nameteather":

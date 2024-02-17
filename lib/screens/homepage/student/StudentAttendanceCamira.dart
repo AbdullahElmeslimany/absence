@@ -105,18 +105,18 @@ class _StudentAttendanceState extends State<StudentAttendance> {
                           success();
                         } else {
                           print("انت بالخارج");
-                          success();
+                          // success();
 
-                          // AwesomeDialog(
-                          //   context: context,
-                          //   dialogType: DialogType.noHeader,
-                          //   animType: AnimType.bottomSlide,
-                          //   title: 'لم يتم تسجيل حضورك انت خارج الجامعة ',
-                          //   btnCancelText: "الرجوع",
-                          //   btnCancelOnPress: () {
-                          //     Navigator.pop(context);
-                          //   },
-                          // ).show();
+                          AwesomeDialog(
+                            context: context,
+                            dialogType: DialogType.noHeader,
+                            animType: AnimType.bottomSlide,
+                            title: 'لم يتم تسجيل حضورك انت خارج الجامعة ',
+                            btnCancelText: "الرجوع",
+                            btnCancelOnPress: () {
+                              Navigator.pop(context);
+                            },
+                          ).show();
                         }
                       }
                     },

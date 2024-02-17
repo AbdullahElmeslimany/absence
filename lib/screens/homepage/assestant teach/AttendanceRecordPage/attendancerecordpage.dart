@@ -73,7 +73,6 @@ class _AttendanceRecordPageState extends State<AttendanceRecordPage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const Gap(20),
-
                   Center(
                     child: QrImageView(
                       // data: widget.numberrandom.toString(),
