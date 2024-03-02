@@ -52,12 +52,13 @@ dependencies:
   gap: ^3.0.1
   # swipe_refresh: ^1.0.2
   permission_handler: ^11.1.0
-  geolocator: ^10.1.0
+  geolocator: ^11.0.0
   # liquid_pull_to_refresh: ^3.0.1
   pull_to_refresh: ^2.0.0
   google_fonts: ^6.1.0
   local_auth: ^2.1.7
   get:
+  web: ^0.5.0
 
 
 dev_dependencies:

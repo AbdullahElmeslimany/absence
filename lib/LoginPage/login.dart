@@ -42,53 +42,53 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  positionGet() async {
-    Position? position = await Geolocator.getLastKnownPosition();
-    // double late = 31.01534035567858;
-    // double lang = 31.377829242038437;
-    // print(late - 31.015478979887387);
-    // print(late - 31.015295674066557);
-    // print(late - 31.016691007875927);
-    // print(late - 31.01641791122879);
-    // print(lang - 31.377746093558976);
-    // print(lang - 31.37804683624477);
-    // print(lang - 31.37902791462027);
-    // print(lang - 31.37937827817284);
+  // positionGet() async {
+  //   Position? position = await Geolocator.getLastKnownPosition();
+  //   // double late = 31.01534035567858;
+  //   // double lang = 31.377829242038437;
+  //   // print(late - 31.015478979887387);
+  //   // print(late - 31.015295674066557);
+  //   // print(late - 31.016691007875927);
+  //   // print(late - 31.01641791122879);
+  //   // print(lang - 31.377746093558976);
+  //   // print(lang - 31.37804683624477);
+  //   // print(lang - 31.37902791462027);
+  //   // print(lang - 31.37937827817284);
 
-    // if (late > 31.015478979887387 &&
-    //     lang > 31.377746093558976 &&
-    //     late > 31.015295674066557 &&
-    //     lang > 31.37804683624477 &&
-    //     late < 31.016691007875927 &&
-    //     lang < 31.37902791462027 &&
-    //     late < 31.01641791122879 &&
-    //     lang < 31.37937827817284) {
-    //   print("انت بالداخل");
-    // } else {
-    //   print("انت بالخارج");
-    // }
-    //31.016013481797803,31.37868090382897
+  //   // if (late > 31.015478979887387 &&
+  //   //     lang > 31.377746093558976 &&
+  //   //     late > 31.015295674066557 &&
+  //   //     lang > 31.37804683624477 &&
+  //   //     late < 31.016691007875927 &&
+  //   //     lang < 31.37902791462027 &&
+  //   //     late < 31.01641791122879 &&
+  //   //     lang < 31.37937827817284) {
+  //   //   print("انت بالداخل");
+  //   // } else {
+  //   //   print("انت بالخارج");
+  //   // }
+  //   //31.016013481797803,31.37868090382897
 
-    // else {
-    //   print("انت بالخارج");
-    // }
-    //////////////////////////
-    if (position!.latitude > 31.015478979887387 &&
-        position!.longitude > 31.377746093558976 &&
-        position!.latitude > 31.015295674066557 &&
-        position!.longitude > 31.37804683624477 &&
-        position!.latitude < 31.016691007875927 &&
-        position!.longitude < 31.37902791462027 &&
-        position!.latitude < 31.01641791122879 &&
-        position!.longitude < 31.37937827817284) {
-      //31.016013481797803,31.37868090382897
-      print("انت بالداخل");
-    } else {
-      print("انت بالخارج");
-    }
-    print(position!.latitude);
-    print(position!.longitude);
-  }
+  //   // else {
+  //   //   print("انت بالخارج");
+  //   // }
+  //   //////////////////////////
+  //   if (position!.latitude > 31.015478979887387 &&
+  //       position!.longitude > 31.377746093558976 &&
+  //       position!.latitude > 31.015295674066557 &&
+  //       position!.longitude > 31.37804683624477 &&
+  //       position!.latitude < 31.016691007875927 &&
+  //       position!.longitude < 31.37902791462027 &&
+  //       position!.latitude < 31.01641791122879 &&
+  //       position!.longitude < 31.37937827817284) {
+  //     //31.016013481797803,31.37868090382897
+  //     print("انت بالداخل");
+  //   } else {
+  //     print("انت بالخارج");
+  //   }
+  //   print(position!.latitude);
+  //   print(position!.longitude);
+  // }
 
   getdatafrommemory() async {
     SharedPreferences prefsAdd = await SharedPreferences.getInstance();

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:absence/constant/link.dart';
+import 'package:absence/screens/homepage/student/show_day_attendance_page/cubit/helper/dayoption.dart';
 import 'package:absence/screens/homepage/student/show_day_attendance_page/cubit/show_attendance_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,7 +22,11 @@ class _ShowDayAttendanceState extends State<ShowDayAttendance> {
     BlocProvider.of<ShowAttendanceCubit>(context).getDataFromAPI(
         link: Link.test,
         id: widget.data[0]["id_university"],
-        mapdata: BlocProvider.of<ShowAttendanceCubit>(context).data);
+        mapdatalecture:
+            BlocProvider.of<ShowAttendanceCubit>(context).datalecture,
+        mapdatasection:
+            BlocProvider.of<ShowAttendanceCubit>(context).datasection);
+
     super.initState();
   }
 
@@ -38,17 +43,21 @@ class _ShowDayAttendanceState extends State<ShowDayAttendance> {
               ? const Center(child: CircularProgressIndicator())
               : SafeArea(
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(5.0),
                     child: Column(
                       children: [
                         const Text(
-                          "كشف غيابك",
+                          "سجل الغياب",
                           style: TextStyle(
                               fontSize: 30, fontWeight: FontWeight.bold),
                         ),
-                        Expanded(
+                        Container(
+                          height: 270,
+                          padding: const EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                              color: const Color.fromARGB(123, 158, 158, 158),
+                              borderRadius: BorderRadius.circular(25)),
                           child: Column(
-                            // mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               const Text("برمجة هيكلية متقدمة",
                                   style: TextStyle(
@@ -66,8 +75,11 @@ class _ShowDayAttendanceState extends State<ShowDayAttendance> {
                                     ],
                                   ),
                                   Container(
-                                    color: Colors.grey[200],
-                                    height: 70,
+                                    decoration: BoxDecoration(
+                                        color: Colors.grey[200],
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    height: 60,
                                     child: ListView.builder(
                                       itemCount: 1,
                                       itemBuilder:
@@ -75,8 +87,12 @@ class _ShowDayAttendanceState extends State<ShowDayAttendance> {
                                         return Column(
                                           children: [
                                             Container(
-                                              color: Colors.grey[200],
-                                              height: 70,
+                                              decoration: BoxDecoration(
+                                                  color: Colors.grey[200],
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10)),
+                                              height: 56,
                                               child: ListView.builder(
                                                 scrollDirection:
                                                     Axis.horizontal,
@@ -85,12 +101,16 @@ class _ShowDayAttendanceState extends State<ShowDayAttendance> {
                                                     (BuildContext context,
                                                         int index) {
                                                   return Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
                                                     children: [
                                                       dayOption(
-                                                          active: BlocProvider
-                                                                  .of<ShowAttendanceCubit>(
+                                                          active: BlocProvider.of<
+                                                                          ShowAttendanceCubit>(
                                                                       context)
-                                                              .data?[index]["day"],
+                                                                  .datasection[
+                                                              index]["day"],
                                                           day: index + 1),
                                                     ],
                                                   );
@@ -105,6 +125,7 @@ class _ShowDayAttendanceState extends State<ShowDayAttendance> {
                                   ),
                                 ],
                               ),
+                              const Gap(7),
                               Column(
                                 children: [
                                   const Row(
@@ -117,8 +138,11 @@ class _ShowDayAttendanceState extends State<ShowDayAttendance> {
                                     ],
                                   ),
                                   Container(
-                                    color: Colors.grey[200],
-                                    height: 70,
+                                    decoration: BoxDecoration(
+                                        color: Colors.grey[200],
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    height: 60,
                                     child: ListView.builder(
                                       itemCount: 1,
                                       itemBuilder:
@@ -126,8 +150,7 @@ class _ShowDayAttendanceState extends State<ShowDayAttendance> {
                                         return Column(
                                           children: [
                                             Container(
-                                              color: Colors.grey[200],
-                                              height: 70,
+                                              height: 56,
                                               child: ListView.builder(
                                                 scrollDirection:
                                                     Axis.horizontal,
@@ -138,10 +161,11 @@ class _ShowDayAttendanceState extends State<ShowDayAttendance> {
                                                   return Column(
                                                     children: [
                                                       dayOption(
-                                                          active: BlocProvider
-                                                                  .of<ShowAttendanceCubit>(
+                                                          active: BlocProvider.of<
+                                                                          ShowAttendanceCubit>(
                                                                       context)
-                                                              .data?[index]["day"],
+                                                                  .datalecture[
+                                                              index]["day"],
                                                           day: index + 1),
                                                     ],
                                                   );
@@ -165,57 +189,6 @@ class _ShowDayAttendanceState extends State<ShowDayAttendance> {
                 ),
         );
       },
-    );
-  }
-
-  Padding dayOption({required active, required day}) {
-    Color colorsactive = Colors.green;
-    Color colorsunactive = Colors.red;
-    Color colorsnull = Colors.grey;
-    return Padding(
-      padding: const EdgeInsets.all(3.0),
-      child: Container(
-        alignment: Alignment.center,
-        height: 50,
-        width: 32,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(100),
-            color: active == 1
-                ? colorsactive
-                : active == 0
-                    ? colorsunactive
-                    : colorsnull),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Center(
-              child: Column(
-                children: [
-                  Container(
-                    alignment: Alignment.center,
-                    child: ClipRRect(
-                      child: Icon(
-                        active == 1
-                            ? Icons.check_circle_outlined
-                            : active == 0
-                                ? Icons.do_disturb_outlined
-                                : Icons.info_outlined,
-                        size: 27,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                  Text(
-                    "$day",
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  )
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
     );
   }
 }

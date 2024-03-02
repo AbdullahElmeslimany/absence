@@ -10,12 +10,16 @@ class ShowAttendanceCubit extends Cubit<ShowAttendanceState> {
 
   static ShowAttendanceCubit get(context) => ShowAttendanceCubit();
 
-  List data = [];
-  List datatest = [];
+  List datasection = [];
+  List datalecture = [];
   bool active = true;
   int id = 20231212;
 
-  getDataFromAPI({required link, required id, required mapdata}) async {
+  getDataFromAPI(
+      {required link,
+      required id,
+      required mapdatasection,
+      required mapdatalecture}) async {
     try {
       emit(LoadingState());
       var responce =
@@ -24,7 +28,10 @@ class ShowAttendanceCubit extends Cubit<ShowAttendanceState> {
         Map responsebody = jsonDecode(responce.body);
         if (responsebody["status"] == "success") {
           for (var i = 0; i <= 9; i++) {
-            mapdata.insert(i, {"day": responsebody["data"][0]["s_${i + 1}"]});
+            mapdatasection
+                .insert(i, {"day": responsebody["data"][0]["s_${i + 1}"]});
+            mapdatalecture
+                .insert(i, {"day": responsebody["data"][0]["l_${i + 1}"]});
             // datatest.insert(i, {
             //   "name": "h",
             //   "day": [responsebody["data"][0]["s_${i + 1}"]]

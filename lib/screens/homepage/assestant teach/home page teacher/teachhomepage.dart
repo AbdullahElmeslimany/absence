@@ -6,6 +6,7 @@ import 'package:absence/screens/homepage/assestant%20teach/home%20page%20teacher
 import 'package:absence/screens/homepage/assestant%20teach/home%20page%20teacher/cubit_radio/radio_custon_cubit_cubit.dart';
 import 'package:absence/screens/homepage/assestant%20teach/home%20page%20teacher/logic/clickbutton.dart';
 import 'package:absence/screens/homepage/assestant%20teach/home%20page%20teacher/logic/connectsection.dart';
+import 'package:absence/screens/homepage/assestant%20teach/home%20page%20teacher/logic/cubit/seclect_day_cubit.dart';
 import 'package:absence/screens/homepage/assestant%20teach/home%20page%20teacher/views/card_section.dart';
 import 'package:absence/screens/homepage/assestant%20teach/home%20page%20teacher/views/card_teacher.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -164,89 +165,91 @@ class _TechHomePageState extends State<TechHomePage> {
         padding: const EdgeInsets.all(8.0),
         child: SizedBox(
           height: 295,
-          child: BlocProvider(
-            create: (context) => RadioCustonCubit(),
-            child: Column(
-              children: [
-                const Text(
-                  "اختار يوم السكشن",
-                  style: TextStyle(
-                      fontSize: 19,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black),
-                ),
-                SizedBox(
-                  height: 215,
-                  child: GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 4),
-                    itemCount: 9,
-                    itemBuilder: (BuildContext contexts, int index) {
-                      return RadioMenuButton(
-                        value: "$index",
-                        groupValue: type,
-                        onChanged: (value) {
-                          setState(() {
-                            type = value!;
-                            print(value);
-                          });
-                        },
-                        child: Text('${index + 1}'),
-                      );
-                    },
+          child: BlocBuilder<SeclectDayCubit, SeclectDayState>(
+            builder: (context, state) {
+              return Column(
+                children: [
+                  const Text(
+                    "اختار يوم السكشن",
+                    style: TextStyle(
+                        fontSize: 19,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
                   ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Container(
-                        width: 95,
-                        height: 40,
-                        decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(12)),
-                        child: Center(
-                            child: MaterialButton(
-                          onPressed: () {
-                            Get.back();
+                  SizedBox(
+                    height: 215,
+                    child: GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 4),
+                      itemCount: 9,
+                      itemBuilder: (BuildContext contexts, int index) {
+                        return RadioMenuButton(
+                          value: "$index",
+                          groupValue: type,
+                          onChanged: (value) {
+                            BlocProvider.of<SeclectDayCubit>(context)
+                                .changeDay(day: value);
+
+                            type = BlocProvider.of<SeclectDayCubit>(context)
+                                .selectday;
                           },
-                          child: const Text(
-                            "الغاء",
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
-                          ),
-                        ))),
-                    Container(
-                        width: 95,
-                        height: 40,
-                        decoration: BoxDecoration(
-                            color: Colors.teal[400],
-                            borderRadius: BorderRadius.circular(12)),
-                        child: Center(
-                            child: MaterialButton(
-                          onPressed: () async {
-                            await buttonClickLogic(
-                                day: type,
-                                id: snapshot.data!.docs[index].id,
-                                snapshot,
-                                index,
-                                context);
-                          },
-                          child: const Text(
-                            "بدا الغياب",
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
-                          ),
-                        ))),
-                  ],
-                ),
-              ],
-            ),
+                          child: Text('${index + 1}'),
+                        );
+                      },
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Container(
+                          width: 95,
+                          height: 40,
+                          decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(12)),
+                          child: Center(
+                              child: MaterialButton(
+                            onPressed: () {
+                              Get.back();
+                            },
+                            child: const Text(
+                              "الغاء",
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                          ))),
+                      Container(
+                          width: 95,
+                          height: 40,
+                          decoration: BoxDecoration(
+                              color: Colors.teal[400],
+                              borderRadius: BorderRadius.circular(12)),
+                          child: Center(
+                              child: MaterialButton(
+                            onPressed: () async {
+                              await buttonClickLogic(
+                                  day: type,
+                                  id: snapshot.data!.docs[index].id,
+                                  snapshot,
+                                  index,
+                                  context);
+                            },
+                            child: const Text(
+                              "بدا الغياب",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                          ))),
+                    ],
+                  ),
+                ],
+              );
+            },
           ),
         ),
       ),

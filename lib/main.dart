@@ -1,9 +1,11 @@
 import 'package:absence/LoginPage/login.dart';
 import 'package:absence/logic_main_page.dart';
 import 'package:absence/screens/homepage/assestant%20teach/home%20page%20teacher/cubit_radio/radio_custon_cubit_cubit.dart';
+import 'package:absence/screens/homepage/assestant%20teach/home%20page%20teacher/logic/cubit/seclect_day_cubit.dart';
 import 'package:absence/screens/homepage/assestant%20teach/home%20page%20teacher/teachhomepage.dart';
 import 'package:absence/screens/homepage/student/show_day_attendance_page/cubit/show_attendance_cubit.dart';
 import 'package:absence/screens/homepage/student/studenthomepage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -13,6 +15,15 @@ import 'screens/homepage/assestant teach/AttendanceRecordPage/cubit/random_updat
 GetDataFromMemoey _dataFromMemoey = GetDataFromMemoey();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  if (kIsWeb) {
+    await Firebase.initializeApp(
+      options: const FirebaseOptions(
+          apiKey: "AIzaSyBdT2-IHEylvoTLVHD02VBWo4Vr06NwpXw",
+          appId: "1:925747815350:web:dba130ebddcc016ed25717",
+          messagingSenderId: "925747815350",
+          projectId: "absence-of-salab"),
+    );
+  }
   await Firebase.initializeApp();
   _dataFromMemoey.getdatahelp();
   runApp(const MyApp());
@@ -32,8 +43,11 @@ class MyApp extends StatelessWidget {
           BlocProvider<ShowAttendanceCubit>(
             create: (BuildContext context) => ShowAttendanceCubit(),
           ),
-          BlocProvider(
+          BlocProvider<RadioCustonCubit>(
             create: (context) => RadioCustonCubit(),
+          ),
+          BlocProvider<SeclectDayCubit>(
+            create: (context) => SeclectDayCubit(),
           )
         ],
         child: GetMaterialApp(
